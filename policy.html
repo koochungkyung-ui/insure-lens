@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VRJEDQ2BLV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-VRJEDQ2BLV');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>내 보험증권 정리 - 보험 돋보기</title>
+  <meta name="description" content="보험증권을 휴대폰으로 찍어 글자를 복사해 붙여 넣으면, 보장 내용·가입금액·기간을 한눈에 정리하고 갱신형·부담보 같은 확인할 점을 알려 드려요.">
+  <link rel="canonical" href="https://insure.cloverpick.app/policy">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="내 보험증권 정리 - 보험 돋보기">
+  <meta property="og:description" content="증권 사진의 글자를 붙여 넣으면 내 보장을 한눈에 정리해 드려요.">
+  <meta property="og:url" content="https://insure.cloverpick.app/policy">
+  <meta property="og:site_name" content="보험 돋보기">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:image" content="https://insure.cloverpick.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="theme-color" content="#0f766e">
+  <meta name="naver-site-verification" content="30c69223f4f4dc7dbb203eff2e3a5ed525e35046" />
+  <meta name="google-adsense-account" content="ca-pub-3330288431208764">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3330288431208764" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg: #f3f6f8; --card: #ffffff; --text: #1f2937; --muted: #6b7280; --line: #e5e7eb;
+      --accent: #0f766e; --accent-soft: #ccfbf1; --warn: #b45309; --warn-soft: #fef3c7; --mark: #fde68a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --muted: #94a3b8; --line: #334155;
+        --accent: #2dd4bf; --accent-soft: #134e4a; --warn: #fbbf24; --warn-soft: #422006; --mark: #854d0e;
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); line-height: 1.6;
+           font-family: system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif; }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px 48px; }
+    header h1 { margin: 0; font-size: 26px; }
+    header p { margin: 4px 0 0; color: var(--muted); }
+    nav.tools { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    nav.tools a { padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card);
+                  color: var(--text); text-decoration: none; font-size: 14px; font-weight: 600; }
+    nav.tools a[aria-current="page"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+    @media (prefers-color-scheme: dark) { nav.tools a[aria-current="page"] { color: #042f2e; } }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; margin-top: 16px; }
+    h2 { margin: 0 0 12px; font-size: 19px; }
+    h3 { margin: 20px 0 6px; font-size: 16px; }
+    .hint { font-size: 14px; color: var(--muted); margin: 8px 0 0; }
+    textarea { width: 100%; min-height: 180px; font: inherit; font-size: 15px; padding: 12px; border-radius: 10px;
+               border: 1px solid var(--line); background: var(--bg); color: var(--text); resize: vertical; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    button { font-size: 15px; font-weight: 700; padding: 10px 16px; border-radius: 10px; cursor: pointer; }
+    button.main { border: 0; background: var(--accent); color: #fff; }
+    button.sub { border: 1px solid var(--line); background: var(--card); color: var(--text); }
+    @media (prefers-color-scheme: dark) { button.main { color: #042f2e; } }
+    [hidden] { display: none !important; }
+    details { border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; margin-top: 10px; }
+    details summary { font-weight: 700; cursor: pointer; }
+    details ol { margin: 8px 0 0; padding-left: 20px; }
+    dl.info { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 0; }
+    dl.info dt { color: var(--muted); font-size: 14px; }
+    dl.info dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+    .group { font-size: 15px; color: var(--accent); margin: 18px 0 4px; }
+    .cov { border-bottom: 1px solid var(--line); padding: 8px 0; }
+    .cov .top { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+    .cov .name { font-weight: 600; overflow-wrap: anywhere; }
+    .cov .amt { font-weight: 800; white-space: nowrap; }
+    .cov .sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 999px;
+             background: var(--warn-soft); color: var(--warn); margin: 2px 4px 0 0; }
+    .badge.ok { background: var(--accent-soft); color: var(--accent); }
+    ul.check { padding-left: 20px; margin: 6px 0 0; }
+    ul.check li { margin: 6px 0; }
+    .term { border-left: 4px solid var(--accent); padding: 6px 0 6px 12px; margin: 12px 0; }
+    .term strong { font-size: 16px; }
+    .term .cat { font-size: 12px; font-weight: 700; color: var(--accent); margin-left: 6px; }
+    .term p { margin: 4px 0 0; }
+    .term .watch { color: var(--warn); font-size: 14px; }
+    .term .watch::before { content: "⚠️ "; }
+    .note { background: var(--warn-soft); border-radius: 12px; padding: 12px 14px; margin-top: 14px; font-size: 14px; }
+    .note strong { color: var(--warn); }
+    .sources { font-size: 13px; color: var(--muted); }
+    .card a { color: var(--accent); }
+    footer { margin-top: 24px; font-size: 13px; color: var(--muted); text-align: center; line-height: 2; }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>🔍 보험 돋보기</h1>
+      <p>보험증권을 붙여 넣으면 내 보장을 한눈에 정리해 드려요.</p>
+      <nav class="tools" aria-label="도구">
+        <a href="./">실손 세대 확인</a>
+        <a href="claim">보험금 청구 체크리스트</a>
+        <a href="explain">약관 쉬운 말 해설</a>
+        <a href="policy" aria-current="page">내 보험증권 정리</a>
+      </nav>
+    </header>
+
+    <section class="card" aria-labelledby="how-title">
+      <h2 id="how-title">1. 증권 사진에서 글자 복사하기</h2>
+      <p style="margin:0">보험증권(가입할 때 받은 증권, 또는 보험사 앱의 "증권 보기" 화면)을 사진으로 찍고, 휴대폰의 글자 인식 기능으로 글자를 복사해 주세요.</p>
+      <details>
+        <summary>갤럭시</summary>
+        <ol>
+          <li>갤러리에서 증권 사진을 열어요.</li>
+          <li>오른쪽 아래 <strong>T 모양 버튼</strong>(텍스트 추출)을 눌러요.</li>
+          <li><strong>모두 선택</strong> → <strong>복사</strong>를 눌러요.</li>
+        </ol>
+      </details>
+      <details>
+        <summary>아이폰</summary>
+        <ol>
+          <li>사진 앱에서 증권 사진을 열어요.</li>
+          <li>글자를 <strong>길게 눌러</strong> 선택하고, 손잡이를 끌어 전체를 고르거나 <strong>전체 선택</strong>을 눌러요.</li>
+          <li><strong>복사</strong>를 눌러요.</li>
+        </ol>
+      </details>
+      <details>
+        <summary>구글 렌즈 (안드로이드·아이폰)</summary>
+        <ol>
+          <li>구글 앱이나 구글 포토에서 사진을 열고 <strong>렌즈</strong>를 눌러요.</li>
+          <li><strong>텍스트</strong> → <strong>모두 선택</strong> → <strong>텍스트 복사</strong>를 눌러요.</li>
+        </ol>
+      </details>
+      <p class="hint">한 장에 다 안 나오면 여러 장을 차례로 복사해 아래 칸에 이어 붙이면 돼요. 이름·주민등록번호·증권번호는 지우고 붙여 넣어도 정리에 지장이 없어요.</p>
+    </section>
+
+    <section class="card" aria-labelledby="paste-title">
+      <h2 id="paste-title">2. 붙여 넣고 정리하기</h2>
+      <label for="src" class="hint" style="display:block;margin:0 0 8px">복사한 글을 붙여 넣어 주세요. 붙여 넣은 글은 이 기기 안에서만 읽고 어디에도 보내거나 저장하지 않아요.</label>
+      <textarea id="src" placeholder="예) 암진단비(유사암제외) 3,000만원 90세만기 20년납 21,300원"></textarea>
+      <div class="row">
+        <button type="button" class="main" id="run-btn">정리하기</button>
+        <button type="button" class="sub" id="sample-btn">예시 증권 넣기</button>
+        <button type="button" class="sub" id="clear-btn">지우기</button>
+      </div>
+      <p class="hint" id="empty" hidden>보장 이름과 가입금액(예: "3,000만원")이 함께 있는 줄을 찾지 못했어요. 증권의 "가입 담보(보장 내용)" 부분이 들어갔는지 확인해 주세요. 글자 인식이 깨졌다면 칸에서 직접 고친 뒤 다시 눌러 보세요.</p>
+    </section>
+
+    <div id="result" hidden aria-live="polite">
+      <section class="card" id="info-card" aria-labelledby="info-title">
+        <h2 id="info-title">계약 정보</h2>
+        <dl class="info" id="info"></dl>
+      </section>
+
+      <section class="card" aria-labelledby="cov-title">
+        <h2 id="cov-title">보장 정리 <span id="cov-count"></span></h2>
+        <p class="hint" style="margin-top:0">오른쪽 금액은 보험금 기준이 되는 <strong>가입금액</strong>이에요. 증권에 보험료가 같이 적혀 있으면 아래 작은 글씨로 보여 드려요.</p>
+        <div id="covs"></div>
+      </section>
+
+      <section class="card" aria-labelledby="check-title">
+        <h2 id="check-title">확인해 볼 점</h2>
+        <ul class="check" id="checks"></ul>
+      </section>
+
+      <section class="card" id="terms-card" aria-labelledby="terms-title">
+        <h2 id="terms-title">이 증권에 나온 용어</h2>
+        <div id="terms"></div>
+      </section>
+    </div>
+
+    <section class="card" aria-labelledby="warn-title">
+      <h2 id="warn-title">알아 두세요</h2>
+      <ul>
+        <li>이 정리는 붙여 넣은 글을 정해진 규칙으로 읽은 결과예요. 증권 모양이 보험사마다 달라서 <strong>빠지거나 잘못 읽은 줄이 있을 수 있어요.</strong> 원본 증권과 꼭 비교해 주세요.</li>
+        <li>보장이 실제로 언제·얼마나 나오는지는 면책·감액기간, 부담보, 약관의 지급 조건에 따라 달라요.</li>
+        <li>내가 가입한 보험 전체 목록은 <a href="https://cont.insure.or.kr" rel="noopener">내보험다보여</a>(신용정보원)에서 조회할 수 있어요.</li>
+      </ul>
+      <div class="note"><strong>참고용 정리예요.</strong> 이 페이지는 보험 상품을 권유하거나 판매하지 않으며, 보장이 충분한지 판단하지 않아요. 정확한 보장 내용은 가입한 보험사 약관과 보험사 고객센터에서 확인해 주세요.</div>
+    </section>
+
+    <footer><a href="about">소개</a> · <a href="privacy">개인정보처리방침</a> · <a href="mailto:contact@cloverpick.app">문의</a><br>© 2026 보험 돋보기 · insure.cloverpick.app</footer>
+  </div>
+
+  <script src="terms.js"></script>
+  <script>
+    // 예시 증권(가상의 상품). 글자 인식처럼 보장 이름과 금액이 다른 줄로 나뉜 경우도 넣었습니다.
+    const SAMPLE = [
+      '상품명 (예시) 무배당 OO건강보험',
+      '계약일 2022.04.11',
+      '보험기간 2022.04.11 ~ 2082.04.11 (90세만기)',
+      '납입기간 20년납  납입주기 월납',
+      '합계보험료 68,500원',
+      '가입담보  가입금액  보험기간  보험료',
+      '기본계약 상해사망 1,000만원 90세만기 20년납 1,200원',
+      '질병사망 1,000만원 80세만기 20년납 9,800원',
+      '암진단비(유사암제외)',
+      '3,000만원 90세만기 20년납 21,300원',
+      '유사암진단비 600만원 90세만기 20년납 1,500원',
+      '뇌혈관질환진단비 1,000만원 90세만기 20년납 6,100원',
+      '허혈성심장질환진단비 1,000만원 90세만기 20년납 5,400원',
+      '[갱신형] 질병수술비 30만원 10년갱신 4,200원',
+      '상해수술비 30만원 90세만기 20년납 900원',
+      '[갱신형] 질병입원일당(1일이상) 3만원 3년갱신 7,800원',
+      '상해후유장해(3~100%) 1,000만원 90세만기 20년납 1,100원',
+      '골절진단비(치아파절제외) 20만원 90세만기 20년납 2,400원',
+      '[갱신형] 질병입원의료비(실손) 5,000만원 1년갱신 5,600원',
+      '가족일상생활중배상책임 1억원 3년갱신 900원',
+      '※ 이 계약은 납입기간 중 해지환급금이 없는 무해지환급형입니다.',
+      '특정부위 부담보: 위(胃) 5년'
+    ].join('\n');
+
+    // 금액: "3,000만원", "1억 5천만원", "25,400원", "3만"(원 없이 만·억이 붙은 것)
+    const AMOUNT = /\d[\d,]*(?:\s*(?:억|천만|천|백만|백|만)(?:\s*\d[\d,]*)?)*\s*원|\d[\d,]*(?:\s*(?:억|천만|천|백만|만)(?:\s*\d[\d,]*)?)+/g;
+    const DATE = /\d{4}\s*[.\-/년]\s*\d{1,2}\s*[.\-/월]\s*\d{1,2}\s*일?/g;
+    const PERIOD = /\d+\s*년\s*\/\s*\d+\s*(?:세|년)|\d+\s*세\s*만기|\d+\s*세|\d+\s*년\s*만기|\d+\s*년\s*갱신|\d+\s*년\s*납|전기납|종신/g;
+    // 보장이 아닌 줄(합계·계약 정보 등)
+    const NOT_COVERAGE = /합계|총\s*보험료|보험료\s*합계|월\s*보험료|납입\s*보험료|^보험료$|적립|환급|할인|계약자|피보험자|수익자|보험기간|납입기간|납입주기|계약일|청약일|증권번호|상품명|^가입금액$/;
+    // 이름만 있고 금액이 다음 줄로 넘어간 보장을 알아보는 말
+    const COVERAGE_WORD = /사망|진단|수술|입원|일당|통원|치료|장해|의료비|실손|골절|화상|배상|벌금|변호사|위로금|간병|항암|방사선|응급|깁스|암|뇌|심장|치아|납입면제/;
+
+    // [분류 이름, 해당하는 말]. 위에서부터 먼저 맞는 분류에 넣습니다.
+    const GROUPS = [
+      ['실손의료비', /의료비|실손/],
+      ['사망', /사망/],
+      ['후유장해', /장해/],
+      ['진단', /진단/],
+      ['수술', /수술/],
+      ['입원', /입원/],
+      ['통원·치료', /통원|치료|항암|방사선|처방|응급|깁스/],
+      ['배상·법률 비용', /배상|벌금|변호사|형사|합의/],
+      ['기타', /./]
+    ];
+
+    // 계약 정보: [보여 줄 이름, 찾을 말]
+    const INFO = [
+      ['상품명', /상품명/],
+      ['계약일', /계약일자|계약일|청약일|가입일/],
+      ['보험기간', /보험기간/],
+      ['납입기간', /납입기간/],
+      ['납입주기', /납입주기|납입방법/],
+      ['보험료', /합계\s*보험료|월\s*보험료|총\s*보험료|보험료\s*합계|납입\s*보험료/]
+    ];
+    const INFO_ANY = new RegExp(INFO.map(i => i[1].source).join('|'), 'g');
+
+    function el(tag, text, cls) { const e = document.createElement(tag); if (text) e.textContent = text; if (cls) e.className = cls; return e; }
+    const tidy = s => s.replace(/\s+/g, ' ').trim();
+
+    // 줄에서 금액·날짜·기간을 빼고 남은 보장 이름
+    function nameOf(line) {
+      return tidy(line.replace(DATE, ' ').replace(AMOUNT, ' ').replace(PERIOD, ' ')
+        .replace(/\[(?:비?갱신형?)\]|\(?비?갱신형\)?/g, ' ')
+        .replace(/기본계약|선택계약|주계약|의무부가|월납|연납|일시납/g, ' ')
+        .replace(/^[\s\d.)\]①-⑳·•*\-|]+/, '').replace(/[\s|:：\-]+$/, ''));
+    }
+
+    function badgesOf(raw) {
+      const b = [];
+      if (/비갱신/.test(raw)) b.push(['비갱신형', true]);
+      else if (/갱신/.test(raw)) b.push(['갱신형', false]);
+      if (/(?:유사암|소액암)\s*제외/.test(raw)) b.push(['유사암 제외', true]);
+      else if (/유사암|소액암|갑상선|제자리암|경계성|기타피부암/.test(raw)) b.push(['유사암', false]);
+      if (/최초\s*1\s*회|1회한/.test(raw)) b.push(['최초 1회', false]);
+      if (/감액/.test(raw)) b.push(['감액', false]);
+      if (/부담보/.test(raw)) b.push(['부담보', false]);
+      return b;
+    }
+
+    function parseCoverages(text) {
+      const list = [];
+      let pending = null; // 금액이 다음 줄에 나온 보장 이름
+      for (const line of text.split(/\r?\n/)) {
+        if (!line.trim()) continue;
+        const amounts = line.match(AMOUNT) || [];
+        let name = nameOf(line);
+        let raw = line;
+        if (!amounts.length) {
+          pending = (name && !NOT_COVERAGE.test(name) && COVERAGE_WORD.test(name)) ? { name, raw: line } : null;
+          continue;
+        }
+        if (!/[가-힣]{2,}/.test(name) && pending) { name = pending.name; raw = pending.raw + ' ' + line; }
+        pending = null;
+        if (!/[가-힣]{2,}/.test(name) || NOT_COVERAGE.test(name)) continue;
+        list.push({
+          name,
+          amount: tidy(amounts[0]),
+          premium: amounts.length > 1 && /^[\d,]+\s*원$/.test(tidy(amounts[amounts.length - 1])) ? tidy(amounts[amounts.length - 1]) : '',
+          periods: [...new Set((raw.replace(DATE, ' ').match(PERIOD) || []).map(tidy))],
+          badges: badgesOf(raw),
+          group: GROUPS.find(g => g[1].test(name))[0]
+        });
+      }
+      return list;
+    }
+
+    function parseInfo(text) {
+      const found = [];
+      for (const line of text.split(/\r?\n/)) {
+        for (const [label, re] of INFO) {
+          if (found.some(f => f[0] === label)) continue;
+          const m = line.match(re);
+          if (!m) continue;
+          // 같은 줄의 다음 항목 이름 앞까지가 값입니다.
+          let value = line.slice(m.index + m[0].length).replace(/^[\s:：]+/, '');
+          INFO_ANY.lastIndex = 0;
+          const next = INFO_ANY.exec(value);
+          if (next) value = value.slice(0, next.index);
+          if (label === '보험료') value = (value.match(AMOUNT) || [''])[0];
+          if (label === '계약일') value = (value.match(DATE) || [''])[0];
+          value = tidy(value);
+          if (value) found.push([label, value]);
+        }
+      }
+      return found;
+    }
+
+    function run() {
+      const text = document.getElementById('src').value;
+      if (!text.trim()) { document.getElementById('src').focus(); return; }
+      const covs = parseCoverages(text);
+      const result = document.getElementById('result');
+      if (!covs.length) { result.hidden = true; document.getElementById('empty').hidden = false; return; }
+      document.getElementById('empty').hidden = true;
+
+      // 계약 정보
+      const info = parseInfo(text);
+      const dl = document.getElementById('info');
+      dl.textContent = '';
+      for (const [k, v] of info) dl.append(el('dt', k), el('dd', v));
+      document.getElementById('info-card').hidden = !info.length;
+
+      // 보장 정리(분류 순서대로)
+      const box = document.getElementById('covs');
+      box.textContent = '';
+      for (const [group] of GROUPS) {
+        const items = covs.filter(c => c.group === group);
+        if (!items.length) continue;
+        box.append(el('h3', `${group} (${items.length})`, 'group'));
+        for (const c of items) {
+          const div = el('div', '', 'cov');
+          const top = el('div', '', 'top');
+          top.append(el('span', c.name, 'name'), el('span', c.amount, 'amt'));
+          div.append(top);
+          const subText = [...c.periods, c.premium && `보험료 ${c.premium}`].filter(Boolean).join(' · ');
+          if (subText || c.badges.length) {
+            const sub = el('div', subText, 'sub');
+            for (const [b, ok] of c.badges) sub.append(' ', el('span', b, ok ? 'badge ok' : 'badge'));
+            div.append(sub);
+          }
+          box.append(div);
+        }
+      }
+      document.getElementById('cov-count').textContent = `(${covs.length}개)`;
+
+      // 확인해 볼 점(판단이 아니라 확인할 거리만)
+      const checks = document.getElementById('checks');
+      checks.textContent = '';
+      const add = (...parts) => { const li = el('li'); li.append(...parts); checks.append(li); };
+      const link = (href, text) => { const a = el('a', text); a.href = href; return a; };
+      const renew = covs.filter(c => c.badges.some(b => b[0] === '갱신형')).length;
+      if (renew) add(`갱신형 보장이 ${renew}개 있어요. 갱신 때 보험료가 오를 수 있으니 갱신 주기와 갱신 후 보험료를 보험사에 확인해 보세요.`);
+      if (/무해지|저해지/.test(text)) add('무해지·저해지환급형이 있어요. 보험료를 내는 동안 해지하면 돌려받는 돈이 없거나 적어요.');
+      if (/부담보/.test(text)) add('부담보 조건이 있어요. 어느 부위·질병이 몇 년 동안 보장되지 않는지 증권에서 확인하세요.');
+      if (covs.some(c => c.group === '실손의료비')) add('실손의료비는 가입 시기(세대)에 따라 자기부담금이 달라요. ', link('./', '실손 세대 확인'), '에서 계약일로 확인해 보세요. 실손은 여러 개여도 실제 쓴 치료비까지만 받아요.');
+      if (covs.some(c => c.group === '진단')) add('진단비는 가입 초기에 면책·감액기간이 있을 수 있어요. 계약일부터 얼마나 지났는지 확인해 보세요.');
+      if (covs.some(c => c.badges.some(b => b[0] === '유사암'))) add('유사암(갑상선암 등)은 일반암과 진단비가 따로 정해져 있어요. 각각의 가입금액을 확인하세요.');
+      add('보험금이 필요한 일이 생기면 ', link('claim', '보험금 청구 체크리스트'), '에서 준비할 서류와 청구 기한을 확인하세요.');
+      add('자동으로 읽은 결과라 빠지거나 틀린 줄이 있을 수 있어요. 원본 증권과 비교해 주세요.');
+
+      // 용어
+      const order = [];
+      for (const h of findTermHits(text)) if (!order.includes(h.t)) order.push(h.t);
+      const terms = document.getElementById('terms');
+      terms.textContent = '';
+      for (const t of order) terms.append(termCard(t));
+      document.getElementById('terms-card').hidden = !order.length;
+
+      result.hidden = false;
+      result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    document.getElementById('run-btn').addEventListener('click', run);
+    document.getElementById('sample-btn').addEventListener('click', () => { document.getElementById('src').value = SAMPLE; run(); });
+    document.getElementById('clear-btn').addEventListener('click', () => {
+      document.getElementById('src').value = '';
+      document.getElementById('result').hidden = true;
+      document.getElementById('empty').hidden = true;
+    });
+  </script>
+</body>
+</html>
