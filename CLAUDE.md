@@ -3,7 +3,9 @@
 내 보험을 쉽게 들여다보는 정적 웹앱입니다. 빌드 도구 없이 HTML·CSS·JS 파일로 만듭니다(로또 앱 `lucky-lotto`와 같은 방식).
 
 - 저장소: https://github.com/koochungkyung-ui/insure-lens (공개)
-- 예정 주소: https://insure.cloverpick.app 또는 `lens.cloverpick.app` (Cloudflare Pages 사용자 설정 도메인, 아직 연결 안 함)
+- 사이트: https://insure.cloverpick.app (2026-10-30 연결, Cloudflare Pages 프로젝트 `insure-lens`의 사용자 설정 도메인. 예비 주소 https://insure-lens.pages.dev)
+- `main`에 푸시하면 Cloudflare Pages가 자동 배포합니다(빌드 단계 없음, 저장소 루트가 그대로 공개).
+- 이 PC에는 git 전역 사용자 설정이 없어, 이 저장소에만 `user.name`·`user.email`을 넣어 두었습니다.
 - 저장소 루트가 그대로 공개되므로 이 파일에도 비밀 정보(비밀번호, 키, 개인정보)를 넣지 않습니다.
 - 커밋, 푸시, 배포는 사용자가 요청할 때만 합니다.
 
