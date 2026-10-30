@@ -3,28 +3,267 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>보험 돋보기</title>
-  <meta name="description" content="내 보험을 쉽게 들여다보는 도구. 실손보험 세대 확인부터 시작합니다.">
+  <title>보험 돋보기 - 내 실손보험은 몇 세대?</title>
+  <meta name="description" content="가입한 날짜만 넣으면 내 실손보험이 몇 세대인지, 자기부담금과 갱신·재가입 구조가 어떤지 한눈에 보여 드려요. 1세대부터 5세대까지 비교표 포함.">
+  <link rel="canonical" href="https://insure.cloverpick.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="보험 돋보기 - 내 실손보험은 몇 세대?">
+  <meta property="og:description" content="가입 날짜만 넣으면 실손보험 세대와 자기부담금 구조를 바로 확인해요.">
+  <meta property="og:url" content="https://insure.cloverpick.app/">
   <style>
-    :root { --bg: #f5f7fb; --card: #ffffff; --text: #1f2937; --muted: #6b7280; --accent: #0f766e; }
+    :root {
+      --bg: #f3f6f8; --card: #ffffff; --text: #1f2937; --muted: #6b7280; --line: #e5e7eb;
+      --accent: #0f766e; --accent-soft: #ccfbf1; --warn: #b45309; --warn-soft: #fef3c7;
+    }
     @media (prefers-color-scheme: dark) {
-      :root { --bg: #111827; --card: #1f2937; --text: #f3f4f6; --muted: #9ca3af; --accent: #2dd4bf; }
+      :root {
+        --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --muted: #94a3b8; --line: #334155;
+        --accent: #2dd4bf; --accent-soft: #134e4a; --warn: #fbbf24; --warn-soft: #422006;
+      }
     }
     * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100dvh; display: flex; align-items: center; justify-content: center;
-           background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, "Noto Sans KR", sans-serif; padding: 16px; }
-    .card { background: var(--card); border-radius: 16px; padding: 32px 24px; max-width: 420px; width: 100%; text-align: center;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, .08); }
-    h1 { margin: 0 0 8px; font-size: 28px; }
-    p { margin: 0; color: var(--muted); line-height: 1.6; }
-    .badge { display: inline-block; margin-top: 16px; padding: 6px 14px; border-radius: 999px; background: var(--accent); color: #fff; font-size: 14px; }
+    body { margin: 0; background: var(--bg); color: var(--text); line-height: 1.6;
+           font-family: system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif; }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px 48px; }
+    header h1 { margin: 0; font-size: 26px; }
+    header p { margin: 4px 0 0; color: var(--muted); }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; margin-top: 16px; }
+    h2 { margin: 0 0 12px; font-size: 19px; }
+    h3 { margin: 16px 0 6px; font-size: 16px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; }
+    input[type="date"] { flex: 1 1 200px; min-width: 0; font-size: 17px; padding: 10px 12px; border-radius: 10px;
+                         border: 1px solid var(--line); background: var(--bg); color: var(--text); }
+    button { font-size: 16px; font-weight: 700; padding: 10px 18px; border: 0; border-radius: 10px;
+             background: var(--accent); color: #fff; cursor: pointer; }
+    @media (prefers-color-scheme: dark) { button { color: #042f2e; } }
+    .hint { font-size: 14px; color: var(--muted); margin: 8px 0 0; }
+    .result[hidden] { display: none; }
+    .gen-badge { display: inline-block; font-size: 22px; font-weight: 800; color: var(--accent);
+                 background: var(--accent-soft); padding: 4px 14px; border-radius: 999px; }
+    .gen-sub { color: var(--muted); margin: 6px 0 0; }
+    dl { margin: 12px 0 0; display: grid; grid-template-columns: 9em 1fr; gap: 8px 12px; }
+    dt { color: var(--muted); }
+    dd { margin: 0; }
+    ul { margin: 6px 0 0; padding-left: 20px; }
+    li { margin: 2px 0; }
+    .note { background: var(--warn-soft); color: var(--text); border-radius: 12px; padding: 12px 14px; margin-top: 14px; font-size: 14px; }
+    .note strong { color: var(--warn); }
+    .table-wrap { overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 14px; }
+    th, td { border-bottom: 1px solid var(--line); padding: 8px 6px; text-align: left; vertical-align: top; }
+    th, td:first-child { white-space: nowrap; }
+    tr.mine td, tr.mine th { background: var(--accent-soft); }
+    .sources { font-size: 13px; color: var(--muted); }
+    .sources a { color: var(--accent); }
+    footer { margin-top: 24px; font-size: 13px; color: var(--muted); text-align: center; }
+    @media (max-width: 480px) {
+      dl { grid-template-columns: 1fr; gap: 2px; }
+      dd { margin-bottom: 8px; }
+    }
   </style>
 </head>
 <body>
-  <main class="card">
-    <h1>🔍 보험 돋보기</h1>
-    <p>내 보험을 쉽게 들여다보는 도구를 준비하고 있어요.<br>첫 기능은 실손보험 세대 확인 계산기예요.</p>
-    <span class="badge">준비 중</span>
-  </main>
+  <div class="wrap">
+    <header>
+      <h1>🔍 보험 돋보기</h1>
+      <p>내 실손보험은 몇 세대일까? 가입한 날짜로 바로 확인해 보세요.</p>
+    </header>
+
+    <section class="card" aria-labelledby="calc-title">
+      <h2 id="calc-title">실손보험 세대 확인</h2>
+      <label for="join-date">실손보험 가입(계약)일</label>
+      <div class="row">
+        <input type="date" id="join-date" min="1990-01-01">
+        <button type="button" id="check-btn">확인하기</button>
+      </div>
+      <p class="hint">보험증권이나 보험사 앱의 "계약일"을 넣어 주세요. 정확한 날짜를 모르면 그 달의 1일로 넣어도 대부분 맞아요. 입력한 날짜는 이 기기 밖으로 보내지 않아요.</p>
+
+      <div class="result" id="result" hidden aria-live="polite">
+        <h3>결과</h3>
+        <span class="gen-badge" id="r-gen"></span>
+        <p class="gen-sub" id="r-period"></p>
+        <dl>
+          <dt>자기부담금</dt><dd id="r-selfpay"></dd>
+          <dt>통원 공제</dt><dd id="r-outpatient"></dd>
+          <dt>갱신·재가입</dt><dd id="r-renew"></dd>
+          <dt>보험료 수준</dt><dd id="r-premium"></dd>
+        </dl>
+        <h3>이런 점이 좋아요</h3>
+        <ul id="r-good"></ul>
+        <h3>이런 점을 알아 두세요</h3>
+        <ul id="r-watch"></ul>
+        <div class="note" id="r-extra" hidden></div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="table-title">
+      <h2 id="table-title">세대별 한눈에 보기</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>세대</th><th>판매 시기</th><th>자기부담(입원 기준)</th><th>갱신 / 재가입</th><th>보험료</th></tr>
+          </thead>
+          <tbody id="gen-table"></tbody>
+        </table>
+      </div>
+      <p class="hint">자기부담 비율은 대표적인 구조예요. 같은 세대라도 가입 시기와 상품(선택형·표준형 등)에 따라 다를 수 있어요.</p>
+    </section>
+
+    <section class="card" aria-labelledby="switch-title">
+      <h2 id="switch-title">세대를 바꿀까 고민될 때 확인할 점</h2>
+      <ul>
+        <li><strong>병원 이용이 잦은 편</strong>이라면 자기부담이 낮은 예전 세대가 실제 받는 보험금이 많을 수 있어요.</li>
+        <li><strong>병원을 거의 안 가는데 보험료가 부담</strong>된다면 최신 세대가 보험료를 크게 줄여 줄 수 있어요.</li>
+        <li>새 세대로 바꾸면 <strong>예전 계약으로 되돌릴 수 없어요.</strong> 바꾸기 전에 보장 차이를 꼭 비교해 보세요.</li>
+        <li>나이가 많거나 치료 중인 병이 있으면 새로 가입할 때 <strong>심사에서 거절</strong>되거나 보장이 제한될 수 있어요.</li>
+        <li>1·2세대 가입자를 위한 <strong>선택형 할인 특약과 계약전환 할인</strong>이 2026년 11월 도입 예정이라고 보도됐어요(세부 조건은 아직 확정 전).</li>
+      </ul>
+      <div class="note"><strong>참고용 정보예요.</strong> 이 페이지는 보험 상품을 권유하거나 판매하지 않아요. 내 계약의 정확한 보장 내용과 자기부담금은 가입한 보험사의 약관과 고객센터, 금융감독원 파인(fine.fss.or.kr)에서 확인해 주세요.</div>
+    </section>
+
+    <section class="card sources" aria-labelledby="src-title">
+      <h2 id="src-title" style="font-size:16px">참고한 자료</h2>
+      <ul>
+        <li>금융위원회 5세대 실손보험 출시 발표(2026년 5월) 보도:
+          <a href="https://www.newsis.com/view/NISX20260504_0003616716" rel="noopener">뉴시스</a>,
+          <a href="https://www.etoday.co.kr/news/view/2581515" rel="noopener">이투데이</a></li>
+        <li>세대별 판매 시기·손해율 보도: <a href="https://www.fnnews.com/news/202606031200392605" rel="noopener">파이낸셜뉴스(2026년 6월)</a></li>
+        <li>4세대 비급여 보험료 할인·할증: <a href="https://kbthink.com/main/asset-management/insurance/insurance-10-240927.html" rel="noopener">KB Think</a></li>
+      </ul>
+      <p>마지막 확인: 2026년 10월</p>
+    </section>
+
+    <footer>© 2026 보험 돋보기 · insure.cloverpick.app</footer>
+  </div>
+
+  <script>
+    // 세대별 정보. 판매 시작일(start, 포함) 순서대로 둡니다.
+    const GENERATIONS = [
+      {
+        gen: 1, name: '1세대 (구실손)', start: '1900-01-01', period: '2009년 9월까지 판매',
+        selfpay: '없거나 아주 적어요 (상품마다 다름)',
+        outpatient: '건당 5천 원 안팎을 빼고 보장하는 상품이 많아요',
+        renew: '3~5년마다 갱신, 재가입 없이 만기까지 유지',
+        premium: '가장 비싸고, 갱신 때 한꺼번에 크게 오를 수 있어요',
+        tableSelf: '0%~ (거의 없음)', tableRenew: '3~5년 / 없음', tablePremium: '가장 높음',
+        good: ['병원비를 거의 전부 돌려받을 수 있어 보장이 가장 넓어요.', '정해진 만기까지 보장 내용이 바뀌지 않아요.'],
+        watch: ['갱신 주기가 길어 그동안 오른 보험료가 한 번에 반영돼요.', '나이가 들수록 보험료 부담이 크게 늘 수 있어요.']
+      },
+      {
+        gen: 2, name: '2세대 (표준화 실손)', start: '2009-10-01', period: '2009년 10월 ~ 2017년 3월 판매',
+        selfpay: '10% (2015년 9월 이후 가입은 급여 10%·비급여 20%가 많아요)',
+        outpatient: '의원 1만 원, 병원 1만 5천 원, 상급종합병원 2만 원 정도를 빼고 보장',
+        renew: '2013년 1월 이후 가입: 1년 갱신·15년마다 재가입 / 그 전 가입: 3년 갱신·만기까지',
+        premium: '1세대보다 낮지만 3·4세대보다 높아요',
+        tableSelf: '10% (일부 20%)', tableRenew: '1~3년 / 15년(2013년~)', tablePremium: '높은 편',
+        good: ['자기부담이 낮아 실제로 돌려받는 금액이 많은 편이에요.', '가입자가 가장 많은 세대라 정보를 찾기 쉬워요.'],
+        watch: ['2013년 이후 가입했다면 15년마다 그때의 새 상품으로 재가입돼요.', '보험료가 해마다 오를 수 있어요.']
+      },
+      {
+        gen: 3, name: '3세대 (착한 실손)', start: '2017-04-01', period: '2017년 4월 ~ 2021년 6월 판매',
+        selfpay: '기본형 급여 10~20%·비급여 20%, 비급여 특약 3종은 30%',
+        outpatient: '최소 1만~2만 원 공제 (특약은 2만 원 또는 30% 중 큰 금액)',
+        renew: '1년 갱신, 15년마다 재가입',
+        premium: '2세대보다 낮은 편이에요',
+        tableSelf: '급여 10~20%, 비급여 20%, 특약 30%', tableRenew: '1년 / 15년', tablePremium: '중간',
+        good: ['기본형만 가입하면 보험료를 낮출 수 있어요.', '보험금을 청구하지 않은 해가 있으면 보험료 할인을 받을 수 있어요.'],
+        watch: ['도수치료·체외충격파·증식치료, 비급여 주사, 비급여 MRI는 특약에 가입해야 보장되고 횟수·금액 한도가 있어요.', '손해율이 높아 보험료 인상이 큰 편이라는 보도가 있어요.']
+      },
+      {
+        gen: 4, name: '4세대', start: '2021-07-01', period: '2021년 7월 ~ 2026년 5월 5일 판매',
+        selfpay: '급여 20%, 비급여 30%',
+        outpatient: '급여 1만 원(상급·종합병원 2만 원), 비급여 3만 원 중 큰 금액 공제',
+        renew: '1년 갱신, 5년마다 재가입',
+        premium: '1~3세대보다 낮아요',
+        tableSelf: '급여 20%, 비급여 30%', tableRenew: '1년 / 5년', tablePremium: '낮음',
+        good: ['기존 세대보다 보험료가 낮아요.', '비급여 보험금을 적게 받으면 다음 해 보험료가 할인돼요.'],
+        watch: ['비급여 보험금을 많이 받으면 다음 해 비급여 보험료가 할증돼요(최대 300%).', '5년마다 그때의 새 상품으로 재가입돼요.']
+      },
+      {
+        gen: 5, name: '5세대', start: '2026-05-06', period: '2026년 5월 6일부터 판매',
+        selfpay: '입원 급여 20%, 중증 비급여 30%, 비중증 비급여 50%',
+        outpatient: '급여는 건강보험 본인부담률과 연동돼요',
+        renew: '보험사 약관에서 확인해 주세요',
+        premium: '4세대보다 약 30%, 1·2세대보다 50% 이상 낮다고 발표됐어요',
+        tableSelf: '급여 20%, 중증 비급여 30%, 비중증 비급여 50%', tableRenew: '약관 확인', tablePremium: '가장 낮음',
+        good: ['보험료가 가장 낮아요.', '중증 비급여는 연 5천만 원 한도로 보장되고, 상급종합병원 입원 때 연간 자기부담 상한(500만 원)이 생겼어요.'],
+        watch: ['도수치료 같은 비중증 비급여는 자기부담 50%, 연 한도 1천만 원으로 보장이 줄었어요.', '중증 비급여는 특약으로 따로 가입하는 구조예요.']
+      }
+    ];
+
+    function findGeneration(dateStr) {
+      let found = null;
+      for (const g of GENERATIONS) {
+        if (dateStr >= g.start) found = g;
+      }
+      return found;
+    }
+
+    function fillList(el, items) {
+      el.innerHTML = '';
+      for (const text of items) {
+        const li = document.createElement('li');
+        li.textContent = text;
+        el.appendChild(li);
+      }
+    }
+
+    function renderTable(mine) {
+      const body = document.getElementById('gen-table');
+      body.innerHTML = '';
+      for (const g of GENERATIONS) {
+        const tr = document.createElement('tr');
+        if (mine && mine.gen === g.gen) tr.className = 'mine';
+        for (const text of [g.gen + '세대', g.period.replace(' 판매', ''), g.tableSelf, g.tableRenew, g.tablePremium]) {
+          const td = document.createElement('td');
+          td.textContent = text;
+          tr.appendChild(td);
+        }
+        body.appendChild(tr);
+      }
+    }
+
+    function check() {
+      const input = document.getElementById('join-date');
+      const value = input.value;
+      if (!value) { input.focus(); return; }
+      const today = new Date().toISOString().slice(0, 10);
+      const g = findGeneration(value);
+      const result = document.getElementById('result');
+
+      document.getElementById('r-gen').textContent = g.name;
+      document.getElementById('r-period').textContent = g.period;
+      document.getElementById('r-selfpay').textContent = g.selfpay;
+      document.getElementById('r-outpatient').textContent = g.outpatient;
+      document.getElementById('r-renew').textContent = g.renew;
+      document.getElementById('r-premium').textContent = g.premium;
+      fillList(document.getElementById('r-good'), g.good);
+      fillList(document.getElementById('r-watch'), g.watch);
+
+      const extra = document.getElementById('r-extra');
+      const notes = [];
+      if (value > today) notes.push('입력한 날짜가 오늘 이후예요. 날짜를 다시 확인해 주세요.');
+      // 세대가 바뀐 달에 가입했다면 보험사마다 적용 시점이 조금 다를 수 있어 안내합니다.
+      const edges = ['2009-10', '2017-04', '2021-07', '2026-05'];
+      if (edges.includes(value.slice(0, 7))) notes.push('세대가 바뀐 달에 가입하셨어요. 보험사마다 새 상품 판매 시작일이 조금 다를 수 있으니 증권의 상품명으로 한 번 더 확인해 주세요.');
+      if (g.gen === 1) notes.push('2009년 이전 실손보험은 보험사·상품마다 보장 구조가 많이 달라요. 증권의 보장 내용을 꼭 확인해 주세요.');
+      if (notes.length) {
+        extra.innerHTML = '<strong>확인해 주세요.</strong> ' + notes.map(n => n.replace(/[<>&]/g, '')).join(' ');
+        extra.hidden = false;
+      } else {
+        extra.hidden = true;
+      }
+
+      result.hidden = false;
+      renderTable(g);
+      result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    document.getElementById('check-btn').addEventListener('click', check);
+    document.getElementById('join-date').addEventListener('keydown', e => { if (e.key === 'Enter') check(); });
+    document.getElementById('join-date').max = new Date().toISOString().slice(0, 10);
+    renderTable(null);
+  </script>
 </body>
 </html>
