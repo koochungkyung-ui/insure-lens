@@ -38,7 +38,7 @@
 - 남은 일(사용자 작업 필요):
   - **구글 애널리틱스**(2026-10-30 완료, 커밋 7f8721b): 사용자 결정으로 로또 앱과 **다른 새 측정 ID `G-VRJEDQ2BLV`**(GA4 속성 "보험 돋보기", 웹 스트림 `https://insure.cloverpick.app`, 향상된 측정 켬, 목표는 트래픽·참여)를 씁니다. 모든 HTML `<head>` 맨 위(`<head>` 바로 다음)에 gtag.js를 넣었고, 새 HTML 페이지에도 넣습니다. 수집 확인은 GA 보고서 → 실시간(설치 직후 "데이터 수집 시작하기"는 최대 48시간 걸릴 수 있음).
   - **Search Console**: `cloverpick.app` **도메인 속성**(Play 등록 때 DNS TXT로 인증)이 하위 도메인을 포함하므로 따로 인증할 필요 없이 사이트맵 `https://insure.cloverpick.app/sitemap.xml`만 제출합니다.
-  - **네이버 서치어드바이저**: 사이트 등록 후 `naver-site-verification` 메타 태그를 받아 모든 HTML에 넣습니다.
+  - **네이버 서치어드바이저**(2026-10-30, 커밋 0bdad8c): `insure.cloverpick.app`을 따로 등록해 받은 `naver-site-verification` 태그(`30c69…5046`)를 모든 HTML `<head>`(애드센스 태그 바로 위)에 넣고 배포했습니다. 로또 앱의 태그는 `cloverpick.app`용이라 쓸 수 없습니다. 지우면 소유 확인이 풀리고, 새 HTML 페이지에도 넣습니다. 남은 일: 사용자가 네이버에서 "소유확인" → 사이트맵(`/sitemap.xml`) 제출, 웹 페이지 수집 요청.
   - 애드센스는 하위 도메인을 따로 추가하지 않아도 되는 것으로 안내했습니다(cloverpick.app 승인 상태를 따름).
 - 다음 기능: 2단계 보험금 청구 체크리스트.
 
