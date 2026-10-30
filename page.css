@@ -1,0 +1,21 @@
+/* 소개·개인정보처리방침 같은 글 페이지 공용 스타일 */
+:root {
+  --bg: #f3f6f8; --card: #ffffff; --text: #1f2937; --muted: #6b7280; --line: #e5e7eb; --accent: #0f766e;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --muted: #94a3b8; --line: #334155; --accent: #2dd4bf; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); line-height: 1.7;
+       font-family: system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif; }
+.wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px 48px; }
+.back { display: inline-block; margin-bottom: 12px; color: var(--accent); text-decoration: none; font-weight: 600; }
+article { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 24px 20px; }
+h1 { margin: 0 0 4px; font-size: 24px; }
+h2 { margin: 24px 0 8px; font-size: 18px; }
+.meta { margin: 0 0 16px; color: var(--muted); font-size: 14px; }
+ul { padding-left: 20px; }
+li { margin: 4px 0; }
+a { color: var(--accent); }
+footer { margin-top: 24px; font-size: 13px; color: var(--muted); text-align: center; }
+footer a { color: var(--muted); }
