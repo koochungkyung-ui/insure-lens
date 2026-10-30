@@ -80,6 +80,17 @@
     .badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 999px;
              background: var(--warn-soft); color: var(--warn); margin: 2px 4px 0 0; }
     .badge.ok { background: var(--accent-soft); color: var(--accent); }
+    .erow { display: grid; grid-template-columns: 1fr 1fr auto; gap: 6px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+    .erow .nm { grid-column: 1 / -1; }
+    .erow input { width: 100%; min-width: 0; font: inherit; font-size: 16px; padding: 8px 10px; border-radius: 8px;
+                  border: 1px solid var(--line); background: var(--bg); color: var(--text); }
+    .erow input.nm { font-weight: 600; }
+    .erow button { padding: 8px 10px; font-size: 14px; }
+    .filebtn { display: inline-block; font-size: 15px; font-weight: 700; padding: 10px 16px; border-radius: 10px; cursor: pointer;
+               border: 1px solid var(--accent); color: var(--accent); background: var(--card); }
+    #pw-row input { flex: 1; min-width: 0; font-size: 16px; padding: 8px 10px; border-radius: 8px;
+                    border: 1px solid var(--line); background: var(--bg); color: var(--text); }
+    ul.tips { margin: 10px 0 0; padding-left: 20px; font-size: 14px; }
     ul.check { padding-left: 20px; margin: 6px 0 0; }
     ul.check li { margin: 6px 0; }
     .term { border-left: 4px solid var(--accent); padding: 6px 0 6px 12px; margin: 12px 0; }
@@ -110,10 +121,18 @@
     </header>
 
     <section class="card" aria-labelledby="how-title">
-      <h2 id="how-title">1. 증권 사진에서 글자 복사하기</h2>
-      <p style="margin:0">보험증권(가입할 때 받은 증권, 또는 보험사 앱의 "증권 보기" 화면)을 사진으로 찍고, 휴대폰의 글자 인식 기능으로 글자를 복사해 주세요.</p>
+      <h2 id="how-title">1. 증권 글자 가져오기</h2>
+      <p style="margin:0">가입할 때 받은 보험증권의 글자를 가져와야 해요. 가진 것에 맞는 방법을 골라 주세요.</p>
       <details>
-        <summary>갤럭시</summary>
+        <summary>📄 전자 증권 PDF가 있다면 (가장 정확)</summary>
+        <ol>
+          <li>보험사 앱·홈페이지에서 증권을 PDF로 받거나, 이메일로 받은 증권 PDF를 준비해요.</li>
+          <li>아래 2번의 <strong>PDF 파일 올리기</strong>를 눌러 파일을 고르면 글자를 바로 읽어요.</li>
+          <li>비밀번호가 걸린 PDF(보통 생년월일)는 비밀번호를 넣으면 열려요. 비밀번호와 파일은 이 기기 안에서만 써요.</li>
+        </ol>
+      </details>
+      <details>
+        <summary>📷 종이 증권 사진 → 갤럭시</summary>
         <ol>
           <li>갤러리에서 증권 사진을 열어요.</li>
           <li>오른쪽 아래 <strong>T 모양 버튼</strong>(텍스트 추출)을 눌러요.</li>
@@ -121,7 +140,7 @@
         </ol>
       </details>
       <details>
-        <summary>아이폰</summary>
+        <summary>📷 종이 증권 사진 → 아이폰</summary>
         <ol>
           <li>사진 앱에서 증권 사진을 열어요.</li>
           <li>글자를 <strong>길게 눌러</strong> 선택하고, 손잡이를 끌어 전체를 고르거나 <strong>전체 선택</strong>을 눌러요.</li>
@@ -129,25 +148,71 @@
         </ol>
       </details>
       <details>
-        <summary>구글 렌즈 (안드로이드·아이폰)</summary>
+        <summary>📷 종이 증권 사진 → 구글 렌즈 (안드로이드·아이폰)</summary>
         <ol>
           <li>구글 앱이나 구글 포토에서 사진을 열고 <strong>렌즈</strong>를 눌러요.</li>
           <li><strong>텍스트</strong> → <strong>모두 선택</strong> → <strong>텍스트 복사</strong>를 눌러요.</li>
         </ol>
       </details>
+      <details>
+        <summary>🗂️ 휴대폰 문서 스캔으로 반듯하게 찍기</summary>
+        <p style="margin:8px 0 0">일반 사진보다 종이를 반듯하게 펴고 잘라 줘서 글자가 더 잘 읽혀요.</p>
+        <ul>
+          <li><strong>갤럭시</strong>: 카메라로 문서를 비추면 나오는 <strong>문서 스캔</strong> 버튼을 눌러요.</li>
+          <li><strong>아이폰</strong>: 메모 앱 → 새 메모 → 카메라(또는 클립) 버튼 → <strong>문서 스캔</strong></li>
+        </ul>
+        <p style="margin:6px 0 0">스캔한 이미지에서 위의 갤럭시·아이폰·구글 렌즈 방법으로 글자를 복사해요.</p>
+      </details>
+      <details>
+        <summary>🖨️ 컴퓨터 스캐너로 스캔했다면 (구글 드라이브)</summary>
+        <ol>
+          <li>스캔한 PDF나 사진 파일을 <strong>구글 드라이브</strong>에 올려요.</li>
+          <li>파일을 마우스 오른쪽 버튼으로 누르고 <strong>연결 앱 → Google 문서</strong>를 골라요. 사진 속 글자가 문서로 바뀌어요.</li>
+          <li>바뀐 글을 복사해 아래 칸에 붙여 넣어요. 파일이 너무 크면 안 될 수 있어서, 보장 내용이 있는 장만 올리는 게 좋아요.</li>
+        </ol>
+        <p class="hint">스캐너로 만든 PDF는 글자가 아닌 그림이라, 아래 "PDF 파일 올리기"로는 읽지 못해요. 이 방법을 써 주세요.</p>
+      </details>
+      <p style="margin:14px 0 0;font-weight:700">더 잘 읽히게 하는 요령</p>
+      <ul class="tips">
+        <li><strong>보장 내용 표 부분만</strong> 화면에 꽉 차게 잘라서 찍어 주세요. 긴 설명 문장이 같이 찍히면 글자가 뒤섞여요.</li>
+        <li>밝은 곳에서, 종이를 평평하게 펴고 정면에서 찍어 주세요.</li>
+        <li>글자가 뒤섞여도 괜찮아요. 3번 표에서 고치거나 직접 입력할 수 있어요.</li>
+      </ul>
       <p class="hint">한 장에 다 안 나오면 여러 장을 차례로 복사해 아래 칸에 이어 붙이면 돼요. 이름·주민등록번호·증권번호는 지우고 붙여 넣어도 정리에 지장이 없어요.</p>
     </section>
 
     <section class="card" aria-labelledby="paste-title">
-      <h2 id="paste-title">2. 붙여 넣고 정리하기</h2>
-      <label for="src" class="hint" style="display:block;margin:0 0 8px">복사한 글을 붙여 넣어 주세요. 붙여 넣은 글은 이 기기 안에서만 읽고 어디에도 보내거나 저장하지 않아요.</label>
+      <h2 id="paste-title">2. 붙여 넣기 또는 PDF 올리기</h2>
+      <div class="row" style="margin:0 0 10px">
+        <label class="filebtn" for="pdf">📄 PDF 파일 올리기</label>
+        <input type="file" id="pdf" accept="application/pdf,.pdf" hidden>
+      </div>
+      <p class="hint" id="pdf-msg" hidden></p>
+      <div class="row" id="pw-row" hidden>
+        <input type="password" id="pw" placeholder="PDF 비밀번호" aria-label="PDF 비밀번호" autocomplete="off">
+        <button type="button" class="sub" id="pw-btn">열기</button>
+      </div>
+      <label for="src" class="hint" style="display:block;margin:10px 0 8px">또는 복사한 글을 붙여 넣어 주세요. 붙여 넣은 글과 올린 파일은 이 기기 안에서만 읽고 어디에도 보내거나 저장하지 않아요.</label>
       <textarea id="src" placeholder="예) 암진단비(유사암제외) 3,000만원 90세만기 20년납 21,300원"></textarea>
       <div class="row">
-        <button type="button" class="main" id="run-btn">정리하기</button>
-        <button type="button" class="sub" id="sample-btn">예시 증권 넣기</button>
+        <button type="button" class="main" id="run-btn">보장 찾기</button>
+        <button type="button" class="sub" id="sample-btn">예시로 미리 보기</button>
+        <button type="button" class="sub" id="manual-btn">직접 입력하기</button>
         <button type="button" class="sub" id="clear-btn">지우기</button>
       </div>
-      <p class="hint" id="empty" hidden>보장 이름과 가입금액(예: "3,000만원")이 함께 있는 줄을 찾지 못했어요. 증권의 "가입 담보(보장 내용)" 부분이 들어갔는지 확인해 주세요. 글자 인식이 깨졌다면 칸에서 직접 고친 뒤 다시 눌러 보세요.</p>
+      <p class="hint">"예시로 미리 보기"는 가상의 증권으로 어떻게 정리되는지 보여 드려요.</p>
+    </section>
+
+    <section class="card" id="edit-card" aria-labelledby="edit-title" hidden>
+      <h2 id="edit-title">3. 확인하고 고치기</h2>
+      <p class="hint" style="margin-top:0" id="edit-msg"></p>
+      <p class="hint">원본 증권을 보면서 <strong>틀린 이름·금액은 고치고</strong>, 엉뚱한 줄은 <strong>삭제</strong>, 빠진 보장은 <strong>줄 추가</strong>로 넣어 주세요. 보장 이름 칸을 누르면 자주 쓰는 이름이 나와요. 고치는 대로 아래 정리에 바로 반영돼요.</p>
+      <div id="rows"></div>
+      <datalist id="cov-names"></datalist>
+      <div class="row">
+        <button type="button" class="sub" id="add-btn">+ 줄 추가</button>
+        <button type="button" class="main" id="view-btn">정리 결과 보기</button>
+      </div>
     </section>
 
     <div id="result" hidden aria-live="polite">
@@ -158,7 +223,7 @@
 
       <section class="card" aria-labelledby="cov-title">
         <h2 id="cov-title">보장 정리 <span id="cov-count"></span></h2>
-        <p class="hint" style="margin-top:0">오른쪽 금액은 보험금 기준이 되는 <strong>가입금액</strong>이에요. 증권에 보험료가 같이 적혀 있으면 아래 작은 글씨로 보여 드려요.</p>
+        <p class="hint" style="margin-top:0">오른쪽 금액은 보험금 기준이 되는 <strong>가입금액</strong>이에요. 기간·보험료 같은 메모는 아래 작은 글씨로 보여 드려요.</p>
         <div id="covs"></div>
       </section>
 
@@ -221,7 +286,15 @@
     // 보장이 아닌 줄(합계·계약 정보 등)
     const NOT_COVERAGE = /합계|총\s*보험료|보험료\s*합계|월\s*보험료|납입\s*보험료|^보험료$|적립|환급|할인|계약자|피보험자|수익자|보험기간|납입기간|납입주기|계약일|청약일|증권번호|상품명|^가입금액$/;
     // 이름만 있고 금액이 다음 줄로 넘어간 보장을 알아보는 말
-    const COVERAGE_WORD = /사망|진단|수술|입원|일당|통원|치료|장해|의료비|실손|골절|화상|배상|벌금|변호사|위로금|간병|항암|방사선|응급|깁스|암|뇌|심장|치아|납입면제/;
+    const COVERAGE_WORD = /사망|진단|수술|입원|일당|통원|외래|처방|조제|영상|MRI|치료|장해|의료비|실손|골절|화상|배상|벌금|변호사|위로금|간병|항암|방사선|응급|깁스|암|뇌|심장|치아|납입면제/;
+    // 보장 설명 문장·안내문(이런 줄 속 금액은 가입금액이 아닙니다)
+    const SENTENCE = /%와|%의|중\s*큰|님이|지급합니다|지급되는|보험금을|최고한도|한도는|한도로|공제금액|차감|합계액|부담한|발생하면|이내에서|입니다|합니다|따릅니다|증권은|계약체결|고객상담|담당자|발행/;
+    // 확인하고 고치기 표의 보장 이름 추천 목록
+    const NAMES = ['상해사망', '질병사망', '일반암진단비', '유사암진단비', '뇌혈관질환진단비', '뇌졸중진단비', '뇌출혈진단비',
+      '허혈성심장질환진단비', '급성심근경색진단비', '암수술비', '질병수술비', '상해수술비', '질병입원일당', '상해입원일당',
+      '상해후유장해', '질병후유장해', '골절진단비', '깁스치료비', '상해입원의료비(실손)', '상해통원의료비-외래(실손)',
+      '상해통원의료비-처방조제(실손)', '질병입원의료비(실손)', '질병통원의료비-외래(실손)', '질병통원의료비-처방조제(실손)',
+      '비급여 MRI·영상진단의료비(실손)', '일상생활배상책임', '운전자 벌금', '교통사고처리지원금', '변호사선임비용', '보험료 납입면제'];
 
     // [분류 이름, 해당하는 말]. 위에서부터 먼저 맞는 분류에 넣습니다.
     const GROUPS = [
@@ -231,7 +304,7 @@
       ['진단', /진단/],
       ['수술', /수술/],
       ['입원', /입원/],
-      ['통원·치료', /통원|치료|항암|방사선|처방|응급|깁스/],
+      ['통원·치료', /통원|외래|처방|조제|치료|항암|방사선|응급|깁스/],
       ['배상·법률 비용', /배상|벌금|변호사|형사|합의/],
       ['기타', /./]
     ];
@@ -270,31 +343,53 @@
       return b;
     }
 
+    const fmtAmount = s => tidy(s).replace(/\s+(?=[만억천원])/g, '');
+
+    // 붙여 넣은 글에서 보장 후보를 찾습니다. 글자 인식이 뒤섞일 수 있어, 결과는 사용자가 표에서 고칩니다.
     function parseCoverages(text) {
       const list = [];
       let pending = null; // 금액이 다음 줄에 나온 보장 이름
-      for (const line of text.split(/\r?\n/)) {
-        if (!line.trim()) continue;
+      let orphan = null;  // 이름보다 먼저 나온 금액
+      let section = '';   // "상해"·"질병" 제목 줄
+      // 한 글자짜리 깨진 줄은 빼고 봅니다.
+      const lines = text.split(/\r?\n/).filter(l => tidy(l).length > 1 || /^\s*\d/.test(l));
+      const amountOnly = l => !!l && !SENTENCE.test(l) && (l.match(AMOUNT) || []).length > 0 && !/[가-힣]{2,}/.test(nameOf(l));
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (/^\s*(상해|질병)\s*$/.test(line)) { section = tidy(line); pending = null; continue; }
+        if (SENTENCE.test(line)) { pending = null; orphan = null; continue; }
         const amounts = line.match(AMOUNT) || [];
-        let name = nameOf(line);
-        let raw = line;
+        const name = nameOf(line);
+        const nameLike = /[가-힣]{2,}/.test(name) && !NOT_COVERAGE.test(name) && COVERAGE_WORD.test(name);
         if (!amounts.length) {
-          pending = (name && !NOT_COVERAGE.test(name) && COVERAGE_WORD.test(name)) ? { name, raw: line } : null;
+          // 이름 바로 다음 줄이 금액이면 그 금액과, 아니면 앞서 남은 금액과 짝짓습니다.
+          if (nameLike && amountOnly(lines[i + 1])) { pending = { name, raw: line }; orphan = null; }
+          else if (nameLike && orphan) { list.push(makeRow(name, orphan.amounts, orphan.raw + ' ' + line, section)); orphan = null; pending = null; }
+          else if (nameLike) pending = { name, raw: line };
+          else pending = null;
           continue;
         }
-        if (!/[가-힣]{2,}/.test(name) && pending) { name = pending.name; raw = pending.raw + ' ' + line; }
-        pending = null;
-        if (!/[가-힣]{2,}/.test(name) || NOT_COVERAGE.test(name)) continue;
-        list.push({
-          name,
-          amount: tidy(amounts[0]),
-          premium: amounts.length > 1 && /^[\d,]+\s*원$/.test(tidy(amounts[amounts.length - 1])) ? tidy(amounts[amounts.length - 1]) : '',
-          periods: [...new Set((raw.replace(DATE, ' ').match(PERIOD) || []).map(tidy))],
-          badges: badgesOf(raw),
-          group: GROUPS.find(g => g[1].test(name))[0]
-        });
+        if (!/[가-힣]{2,}/.test(name)) {
+          if (pending) { list.push(makeRow(pending.name, amounts, pending.raw + ' ' + line, section)); pending = null; }
+          else orphan = { amounts, raw: line };
+          continue;
+        }
+        pending = null; orphan = null;
+        if (!NOT_COVERAGE.test(name)) list.push(makeRow(name, amounts, line, section));
       }
       return list;
+    }
+
+    // 표 한 줄: 이름, 가입금액(첫 금액), 메모(기간·보험료·갱신형 같은 조건)
+    function makeRow(name, amounts, raw, section) {
+      if (section && /^(입원|외래|통원|처방|조제)/.test(name)) name = `${section} ${name}`;
+      const last = fmtAmount(amounts[amounts.length - 1]);
+      const premium = amounts.length > 1 && /^[\d,]+원$/.test(last) ? last : '';
+      const memo = [...new Set((raw.replace(DATE, ' ').match(PERIOD) || []).map(tidy))];
+      if (premium) memo.push(`보험료 ${premium}`);
+      const known = badgesOf(name + ' ' + memo.join(' ')).map(b => b[0]);
+      for (const [b] of badgesOf(raw)) if (!known.includes(b)) memo.push(b);
+      return { name, amount: fmtAmount(amounts[0]), memo: memo.join(' ') };
     }
 
     function parseInfo(text) {
@@ -318,20 +413,66 @@
       return found;
     }
 
-    function run() {
-      const text = document.getElementById('src').value;
-      if (!text.trim()) { document.getElementById('src').focus(); return; }
-      const covs = parseCoverages(text);
-      const result = document.getElementById('result');
-      if (!covs.length) { result.hidden = true; document.getElementById('empty').hidden = false; return; }
-      document.getElementById('empty').hidden = true;
+    let rows = [];      // 확인하고 고치기 표: { name, amount, memo }
+    let srcText = '';   // 마지막으로 읽은 붙여 넣은 글
 
-      // 계약 정보
-      const info = parseInfo(text);
+    function input(value, placeholder, label, cls) {
+      const i = el('input', '', cls); i.type = 'text'; i.value = value; i.placeholder = placeholder; i.setAttribute('aria-label', label);
+      return i;
+    }
+
+    function rowEl(r) {
+      const div = el('div', '', 'erow');
+      const name = input(r.name, '보장 이름 (예: 질병입원의료비)', '보장 이름', 'nm');
+      name.setAttribute('list', 'cov-names');
+      const amount = input(r.amount, '가입금액 (예: 5,000만원)', '가입금액');
+      const memo = input(r.memo, '메모(갱신형 등)', '메모');
+      const del = el('button', '삭제', 'sub'); del.type = 'button';
+      for (const [box, key] of [[name, 'name'], [amount, 'amount'], [memo, 'memo']]) {
+        box.addEventListener('input', () => { r[key] = box.value; renderSummary(); });
+      }
+      del.addEventListener('click', () => { rows = rows.filter(x => x !== r); div.remove(); renderSummary(); });
+      div.append(name, amount, memo, del);
+      return div;
+    }
+
+    function showEditor(list, msg) {
+      rows = list;
+      const box = document.getElementById('rows');
+      box.textContent = '';
+      for (const r of rows) box.append(rowEl(r));
+      document.getElementById('edit-msg').textContent = msg;
+      const info = parseInfo(srcText);
       const dl = document.getElementById('info');
       dl.textContent = '';
       for (const [k, v] of info) dl.append(el('dt', k), el('dd', v));
       document.getElementById('info-card').hidden = !info.length;
+      const card = document.getElementById('edit-card');
+      card.hidden = false;
+      renderSummary();
+      card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    const blank = () => ({ name: '', amount: '', memo: '' });
+
+    function findCoverages() {
+      srcText = document.getElementById('src').value;
+      if (!srcText.trim()) { document.getElementById('src').focus(); return; }
+      const list = parseCoverages(srcText);
+      if (list.length) showEditor(list, `보장 후보 ${list.length}개를 찾았어요. 원본 증권과 비교해 확인해 주세요.`);
+      else showEditor([blank(), blank(), blank()], '자동으로 찾은 보장이 없어요. 글자 인식이 많이 뒤섞인 것 같아요. 아래 칸에 직접 입력하거나, 보장 표 부분만 다시 찍어 붙여 넣어 보세요.');
+    }
+
+    // 표의 내용으로 아래 정리를 다시 그립니다.
+    function renderSummary() {
+      const covs = rows.filter(r => r.name.trim() || r.amount.trim()).map(r => {
+        const name = tidy(r.name) || '(이름 없음)';
+        return { name, amount: tidy(r.amount) || '금액 미입력', memo: tidy(r.memo),
+                 badges: badgesOf(name + ' ' + r.memo), group: GROUPS.find(g => g[1].test(name))[0] };
+      });
+      const result = document.getElementById('result');
+      result.hidden = !covs.length;
+      if (!covs.length) return;
 
       // 보장 정리(분류 순서대로)
       const box = document.getElementById('covs');
@@ -345,9 +486,8 @@
           const top = el('div', '', 'top');
           top.append(el('span', c.name, 'name'), el('span', c.amount, 'amt'));
           div.append(top);
-          const subText = [...c.periods, c.premium && `보험료 ${c.premium}`].filter(Boolean).join(' · ');
-          if (subText || c.badges.length) {
-            const sub = el('div', subText, 'sub');
+          if (c.memo || c.badges.length) {
+            const sub = el('div', c.memo, 'sub');
             for (const [b, ok] of c.badges) sub.append(' ', el('span', b, ok ? 'badge ok' : 'badge'));
             div.append(sub);
           }
@@ -357,38 +497,134 @@
       document.getElementById('cov-count').textContent = `(${covs.length}개)`;
 
       // 확인해 볼 점(판단이 아니라 확인할 거리만)
+      const all = srcText + '\n' + covs.map(c => c.name + ' ' + c.memo).join('\n');
       const checks = document.getElementById('checks');
       checks.textContent = '';
       const add = (...parts) => { const li = el('li'); li.append(...parts); checks.append(li); };
       const link = (href, text) => { const a = el('a', text); a.href = href; return a; };
       const renew = covs.filter(c => c.badges.some(b => b[0] === '갱신형')).length;
       if (renew) add(`갱신형 보장이 ${renew}개 있어요. 갱신 때 보험료가 오를 수 있으니 갱신 주기와 갱신 후 보험료를 보험사에 확인해 보세요.`);
-      if (/무해지|저해지/.test(text)) add('무해지·저해지환급형이 있어요. 보험료를 내는 동안 해지하면 돌려받는 돈이 없거나 적어요.');
-      if (/부담보/.test(text)) add('부담보 조건이 있어요. 어느 부위·질병이 몇 년 동안 보장되지 않는지 증권에서 확인하세요.');
+      if (/무해지|저해지/.test(all)) add('무해지·저해지환급형이 있어요. 보험료를 내는 동안 해지하면 돌려받는 돈이 없거나 적어요.');
+      if (/부담보/.test(all)) add('부담보 조건이 있어요. 어느 부위·질병이 몇 년 동안 보장되지 않는지 증권에서 확인하세요.');
       if (covs.some(c => c.group === '실손의료비')) add('실손의료비는 가입 시기(세대)에 따라 자기부담금이 달라요. ', link('./', '실손 세대 확인'), '에서 계약일로 확인해 보세요. 실손은 여러 개여도 실제 쓴 치료비까지만 받아요.');
       if (covs.some(c => c.group === '진단')) add('진단비는 가입 초기에 면책·감액기간이 있을 수 있어요. 계약일부터 얼마나 지났는지 확인해 보세요.');
       if (covs.some(c => c.badges.some(b => b[0] === '유사암'))) add('유사암(갑상선암 등)은 일반암과 진단비가 따로 정해져 있어요. 각각의 가입금액을 확인하세요.');
       add('보험금이 필요한 일이 생기면 ', link('claim', '보험금 청구 체크리스트'), '에서 준비할 서류와 청구 기한을 확인하세요.');
-      add('자동으로 읽은 결과라 빠지거나 틀린 줄이 있을 수 있어요. 원본 증권과 비교해 주세요.');
+      add('자동으로 읽은 결과를 바탕으로 해서 빠지거나 틀린 줄이 있을 수 있어요. 원본 증권과 비교해 주세요.');
 
       // 용어
       const order = [];
-      for (const h of findTermHits(text)) if (!order.includes(h.t)) order.push(h.t);
+      for (const h of findTermHits(all)) if (!order.includes(h.t)) order.push(h.t);
       const terms = document.getElementById('terms');
       terms.textContent = '';
       for (const t of order) terms.append(termCard(t));
       document.getElementById('terms-card').hidden = !order.length;
-
-      result.hidden = false;
-      result.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    document.getElementById('run-btn').addEventListener('click', run);
-    document.getElementById('sample-btn').addEventListener('click', () => { document.getElementById('src').value = SAMPLE; run(); });
+    // PDF 읽기: 파일을 고를 때만 pdf.js를 불러오고, 파일은 이 기기 안에서만 읽습니다.
+    const PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
+    let pdfReady = null;
+    let pdfFile = null;
+    function loadPdfJs() {
+      if (!pdfReady) pdfReady = new Promise((ok, fail) => {
+        const s = document.createElement('script');
+        s.src = PDFJS + 'pdf.min.js';
+        s.onload = () => { pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS + 'pdf.worker.min.js'; ok(); };
+        s.onerror = () => { pdfReady = null; fail(new Error('load')); };
+        document.head.append(s);
+      });
+      return pdfReady;
+    }
+
+    // 같은 높이의 글 조각을 한 줄로 모으고, 왼쪽부터 이어 붙입니다(떨어져 있으면 띄어 씀).
+    async function pdfText(data, password) {
+      const doc = await pdfjsLib.getDocument({ data, password }).promise;
+      const out = [];
+      for (let n = 1; n <= doc.numPages; n++) {
+        const { items } = await (await doc.getPage(n)).getTextContent();
+        const lines = [];
+        for (const it of items) {
+          if (!it.str.trim()) continue;
+          const x = it.transform[4], y = it.transform[5];
+          let line = lines.find(l => Math.abs(l.y - y) < 3);
+          if (!line) lines.push(line = { y, parts: [] });
+          line.parts.push({ x, w: it.width, s: it.str });
+        }
+        lines.sort((a, b) => b.y - a.y);
+        for (const l of lines) {
+          l.parts.sort((a, b) => a.x - b.x);
+          let text = '', end = null;
+          for (const q of l.parts) { text += (end !== null && q.x - end > 2 ? ' ' : '') + q.s; end = q.x + q.w; }
+          out.push(text);
+        }
+      }
+      return out.join('\n');
+    }
+
+    function pdfMsg(text) { const m = document.getElementById('pdf-msg'); m.textContent = text; m.hidden = !text; }
+
+    async function openPdf(password) {
+      if (!pdfFile) return;
+      pdfMsg('PDF를 읽고 있어요…');
+      try {
+        await loadPdfJs();
+        const text = await pdfText(new Uint8Array(await pdfFile.arrayBuffer()), password);
+        document.getElementById('pw-row').hidden = true;
+        document.getElementById('pw').value = '';
+        if (tidy(text).length < 20) {
+          pdfMsg('이 PDF에서는 글자를 찾지 못했어요. 스캐너로 만든 PDF처럼 글자가 그림으로 들어 있으면 읽을 수 없어요. 위 "컴퓨터 스캐너로 스캔했다면" 방법을 써 주세요.');
+          return;
+        }
+        document.getElementById('src').value = text;
+        pdfMsg(`"${pdfFile.name}"에서 글자를 읽었어요. 아래 칸에서 내용을 확인할 수 있어요.`);
+        findCoverages();
+      } catch (e) {
+        if (e && e.name === 'PasswordException') {
+          document.getElementById('pw-row').hidden = false;
+          pdfMsg(e.code === 2 ? '비밀번호가 맞지 않아요. 다시 넣어 주세요.' : '비밀번호가 걸린 PDF예요. 보통 생년월일 6자리(예: 850315)나 보험사가 안내한 번호예요.');
+          document.getElementById('pw').focus();
+        } else if (e && e.message === 'load') {
+          pdfMsg('PDF 읽기 도구를 불러오지 못했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.');
+        } else {
+          pdfMsg('PDF를 열지 못했어요. 파일이 손상됐거나 지원하지 않는 형식일 수 있어요. 글자를 복사해 붙여 넣어 주세요.');
+        }
+      }
+    }
+
+    document.getElementById('pdf').addEventListener('change', e => {
+      pdfFile = e.target.files[0] || null;
+      e.target.value = '';
+      document.getElementById('pw-row').hidden = true;
+      if (pdfFile) openPdf();
+    });
+    document.getElementById('pw-btn').addEventListener('click', () => openPdf(document.getElementById('pw').value));
+    document.getElementById('pw').addEventListener('keydown', e => { if (e.key === 'Enter') openPdf(e.target.value); });
+
+    for (const n of NAMES) { const o = el('option'); o.value = n; document.getElementById('cov-names').append(o); }
+
+    document.getElementById('run-btn').addEventListener('click', findCoverages);
+    document.getElementById('sample-btn').addEventListener('click', () => { document.getElementById('src').value = SAMPLE; findCoverages(); });
+    document.getElementById('manual-btn').addEventListener('click', () => {
+      srcText = document.getElementById('src').value;
+      showEditor([blank(), blank(), blank()], '증권을 보면서 보장 이름과 가입금액을 직접 입력해 주세요.');
+    });
+    document.getElementById('add-btn').addEventListener('click', () => {
+      const r = blank(); rows.push(r);
+      const div = rowEl(r); document.getElementById('rows').append(div);
+      div.querySelector('input').focus();
+    });
+    document.getElementById('view-btn').addEventListener('click', () => {
+      const result = document.getElementById('result');
+      if (result.hidden) { document.getElementById('edit-msg').textContent = '보장 이름이나 가입금액을 하나 이상 입력해 주세요.'; return; }
+      result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
     document.getElementById('clear-btn').addEventListener('click', () => {
       document.getElementById('src').value = '';
+      srcText = ''; rows = []; pdfFile = null;
+      pdfMsg('');
+      document.getElementById('pw-row').hidden = true;
+      document.getElementById('edit-card').hidden = true;
       document.getElementById('result').hidden = true;
-      document.getElementById('empty').hidden = true;
     });
   </script>
 </body>
