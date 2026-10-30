@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VRJEDQ2BLV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-VRJEDQ2BLV');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>보험금 청구 체크리스트 - 보험 돋보기</title>
+  <meta name="description" content="병원 진료, 입원, 수술, 암 진단, 골절, 교통사고, 치과 치료 뒤 청구할 수 있는 보장 종류와 필요한 서류, 청구 기한(3년)을 한 번에 정리해 드려요.">
+  <link rel="canonical" href="https://insure.cloverpick.app/claim">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="보험금 청구 체크리스트 - 보험 돋보기">
+  <meta property="og:description" content="상황만 고르면 청구할 수 있는 보장과 필요한 서류, 청구 기한을 알려 드려요.">
+  <meta property="og:url" content="https://insure.cloverpick.app/claim">
+  <meta property="og:site_name" content="보험 돋보기">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:image" content="https://insure.cloverpick.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="theme-color" content="#0f766e">
+  <meta name="naver-site-verification" content="30c69223f4f4dc7dbb203eff2e3a5ed525e35046" />
+  <meta name="google-adsense-account" content="ca-pub-3330288431208764">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3330288431208764" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg: #f3f6f8; --card: #ffffff; --text: #1f2937; --muted: #6b7280; --line: #e5e7eb;
+      --accent: #0f766e; --accent-soft: #ccfbf1; --warn: #b45309; --warn-soft: #fef3c7;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --muted: #94a3b8; --line: #334155;
+        --accent: #2dd4bf; --accent-soft: #134e4a; --warn: #fbbf24; --warn-soft: #422006;
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); line-height: 1.6;
+           font-family: system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif; }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px 48px; }
+    header h1 { margin: 0; font-size: 26px; }
+    header p { margin: 4px 0 0; color: var(--muted); }
+    nav.tools { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    nav.tools a { padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card);
+                  color: var(--text); text-decoration: none; font-size: 14px; font-weight: 600; }
+    nav.tools a[aria-current="page"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+    @media (prefers-color-scheme: dark) { nav.tools a[aria-current="page"] { color: #042f2e; } }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; margin-top: 16px; }
+    h2 { margin: 0 0 12px; font-size: 19px; }
+    h3 { margin: 18px 0 6px; font-size: 16px; }
+    .hint { font-size: 14px; color: var(--muted); margin: 8px 0 0; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { font-size: 15px; font-weight: 600; padding: 8px 14px; border-radius: 999px; cursor: pointer;
+            border: 1px solid var(--line); background: var(--bg); color: var(--text); }
+    .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+    @media (prefers-color-scheme: dark) { .chip[aria-pressed="true"] { color: #042f2e; } }
+    .result[hidden] { display: none; }
+    .cov { border-left: 4px solid var(--accent); padding: 4px 0 4px 12px; margin: 10px 0; }
+    .cov strong { display: block; }
+    .cov span { color: var(--muted); font-size: 14px; }
+    .cov .from { font-size: 12px; color: var(--accent); font-weight: 600; }
+    ul.docs { list-style: none; padding: 0; margin: 6px 0 0; }
+    ul.docs li { margin: 6px 0; }
+    ul.docs label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+    ul.docs input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--accent); flex: none; }
+    ul.docs small { display: block; color: var(--muted); }
+    ul.tips { margin: 6px 0 0; padding-left: 20px; }
+    ul.tips li { margin: 4px 0; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; }
+    input[type="date"] { flex: 1 1 200px; min-width: 0; font-size: 17px; padding: 10px 12px; border-radius: 10px;
+                         border: 1px solid var(--line); background: var(--bg); color: var(--text); }
+    button.main { font-size: 16px; font-weight: 700; padding: 10px 18px; border: 0; border-radius: 10px;
+                  background: var(--accent); color: #fff; cursor: pointer; }
+    @media (prefers-color-scheme: dark) { button.main { color: #042f2e; } }
+    .deadline { margin-top: 12px; font-size: 17px; }
+    .deadline strong { color: var(--accent); }
+    .deadline.late strong { color: var(--warn); }
+    .note { background: var(--warn-soft); border-radius: 12px; padding: 12px 14px; margin-top: 14px; font-size: 14px; }
+    .note strong { color: var(--warn); }
+    label.field { display: block; font-weight: 600; margin-bottom: 6px; }
+    .sources { font-size: 13px; color: var(--muted); }
+    .sources a, .card a { color: var(--accent); }
+    footer { margin-top: 24px; font-size: 13px; color: var(--muted); text-align: center; line-height: 2; }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>🔍 보험 돋보기</h1>
+      <p>병원에 다녀왔다면, 받을 수 있는 보험금을 놓치지 마세요.</p>
+      <nav class="tools" aria-label="도구">
+        <a href="./">실손 세대 확인</a>
+        <a href="claim" aria-current="page">보험금 청구 체크리스트</a>
+      </nav>
+    </header>
+
+    <section class="card" aria-labelledby="pick-title">
+      <h2 id="pick-title">어떤 일이 있었나요?</h2>
+      <p class="hint" style="margin:0 0 12px">해당하는 것을 모두 골라 주세요. 예: 입원해서 수술했다면 "입원"과 "수술"</p>
+      <div class="chips" id="chips"></div>
+
+      <div class="result" id="result" hidden aria-live="polite">
+        <h3>확인해 볼 보장</h3>
+        <p class="hint" style="margin-top:0">가입한 보험에 아래 보장(특약)이 있는지 증권이나 보험사 앱에서 확인해 보세요.</p>
+        <div id="coverages"></div>
+
+        <h3>준비할 서류</h3>
+        <p class="hint" style="margin-top:0">체크하면서 챙겨 보세요. 보험사·청구 금액에 따라 필요한 서류가 줄거나 늘 수 있어요.</p>
+        <ul class="docs" id="docs"></ul>
+
+        <h3>알아 두면 좋은 점</h3>
+        <ul class="tips" id="tips"></ul>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="deadline-title">
+      <h2 id="deadline-title">청구 기한 계산</h2>
+      <label class="field" for="event-date">진료·진단·사고가 있었던 날</label>
+      <div class="row">
+        <input type="date" id="event-date" min="1990-01-01">
+        <button type="button" class="main" id="deadline-btn">계산하기</button>
+      </div>
+      <p class="deadline" id="deadline" hidden></p>
+      <p class="hint">보험금은 보통 보험사고가 생긴 날부터 <strong>3년</strong> 안에 청구해야 해요(상법상 소멸시효). 입력한 날짜는 기기 밖으로 보내지 않아요.</p>
+    </section>
+
+    <section class="card" aria-labelledby="common-title">
+      <h2 id="common-title">청구 전에 꼭 알아 두세요</h2>
+      <ul class="tips">
+        <li><strong>실손보험이 여러 개</strong>라면 실제 낸 병원비 안에서 나눠서 보상해요. 반대로 <strong>진단비·수술비·입원일당</strong>처럼 정해진 금액을 주는 보장은 가입한 곳마다 각각 받을 수 있어요.</li>
+        <li><strong>실손24</strong>(실손보험 청구 전산화) 앱·홈페이지를 쓰면 병원에서 서류를 떼지 않고 청구할 수 있어요. 2024년 10월 병원급, 2025년 10월 의원·약국으로 넓어졌지만 아직 연결되지 않은 곳도 있으니 병원 검색으로 확인해 보세요.</li>
+        <li>청구 금액이 적은 실손 청구는 영수증과 세부내역서만으로 되는 경우가 많아요. 진단서는 발급비가 들기 때문에 <strong>보험사에 먼저 필요한 서류를 물어보세요.</strong></li>
+        <li>잊고 있던 보험금은 <a href="https://cont.insure.or.kr" rel="noopener">내보험찾아줌</a>(생명·손해보험협회)에서 무료로 조회할 수 있어요.</li>
+        <li>보험금 지급이 늦어지거나 거절되면 이유를 서면으로 받아 두고, 납득이 안 되면 <a href="https://www.fss.or.kr" rel="noopener">금융감독원</a> 민원을 이용할 수 있어요.</li>
+      </ul>
+      <div class="note"><strong>참고용 정보예요.</strong> 실제로 받을 수 있는 보험금은 가입한 상품의 약관(보장 범위, 면책 기간, 감액 조건 등)에 따라 달라요. 이 페이지는 보험 상품을 권유하거나 판매하지 않아요. 정확한 내용은 가입한 보험사 고객센터에 확인해 주세요.</div>
+    </section>
+
+    <section class="card sources" aria-labelledby="src-title">
+      <h2 id="src-title" style="font-size:16px">참고한 자료</h2>
+      <ul>
+        <li>실손24 2단계(의원·약국) 시행: <a href="https://biz.newdaily.co.kr/site/data/html/2025/10/22/2025102200207.html" rel="noopener">뉴데일리</a>, <a href="https://www.fnnews.com/news/202508071401206002" rel="noopener">파이낸셜뉴스</a></li>
+        <li>보험금 청구권 소멸시효 3년: 상법 제662조</li>
+        <li>숨은 보험금 조회: <a href="https://cont.insure.or.kr" rel="noopener">내보험찾아줌</a></li>
+      </ul>
+      <p>마지막 확인: 2026년 10월</p>
+    </section>
+
+    <footer><a href="about">소개</a> · <a href="privacy">개인정보처리방침</a> · <a href="mailto:contact@cloverpick.app">문의</a><br>© 2026 보험 돋보기 · insure.cloverpick.app</footer>
+  </div>
+
+  <script>
+    // 서류 이름과 설명
+    const DOCS = {
+      form:      ['보험금 청구서', '보험사 앱·홈페이지에서 쓰거나 양식을 받아요'],
+      id:        ['신분증 사본', '청구 금액이 크거나 가족이 대신 청구할 때'],
+      bank:      ['보험금 받을 본인 계좌', '청구서에 적어요'],
+      receipt:   ['진료비(약제비) 계산서·영수증', '병원·약국 수납 창구에서 받아요'],
+      detail:    ['진료비 세부산정내역서', '비급여 항목이 있거나 금액이 클 때'],
+      rx:        ['처방전(환자 보관용)', '질병분류코드가 적힌 것. 약값 청구와 진단명 확인용'],
+      diag:      ['진단서', '진단명과 질병분류코드가 적힌 것'],
+      opinion:   ['소견서 또는 진단명이 적힌 서류', '금액이 적으면 진단서 대신 되는 경우가 많아요'],
+      admit:     ['입·퇴원확인서', '입원 기간과 진단명이 적힌 것'],
+      surgery:   ['수술확인서', '수술명·수술일·수술코드가 적힌 것'],
+      biopsy:    ['조직(병리)검사 결과지', '암 진단 확인용'],
+      imaging:   ['CT·MRI 등 검사 결과지(판독지)', '뇌·심장 질환 진단 확인용'],
+      xray:      ['X-ray 판독지 또는 초진 기록', '골절 확인용'],
+      accident:  ['사고를 알 수 있는 서류', '자동차보험 접수번호, 교통사고 사실확인원 등'],
+      dental:    ['치과 치료확인서와 치료 전·후 X-ray', '치아보험 청구용']
+    };
+
+    // 상황별 확인해 볼 보장, 서류, 팁
+    const SITUATIONS = [
+      { id: 'outpatient', label: '🏥 병원 진료·약값',
+        cov: [['실손의료비', '실제 낸 병원비(약값 포함)에서 공제금액·자기부담금을 뺀 만큼 받아요']],
+        docs: ['form', 'bank', 'receipt', 'detail', 'rx', 'opinion'],
+        tips: ['통원 실손은 하루 공제금액이 있어서 아주 적은 금액은 받을 게 없을 수 있어요. 내 실손의 세대는 "실손 세대 확인"에서 볼 수 있어요.'] },
+      { id: 'inpatient', label: '🛏️ 입원',
+        cov: [['실손의료비', '실제 낸 병원비(약값 포함)에서 공제금액·자기부담금을 뺀 만큼 받아요'], ['질병·상해 입원일당', '입원한 날짜만큼 정해진 금액(가입한 경우)']],
+        docs: ['form', 'id', 'bank', 'receipt', 'detail', 'admit', 'diag'],
+        tips: ['입원일당은 "며칠 이상 입원" 같은 조건이 붙은 상품이 있어요.'] },
+      { id: 'surgery', label: '🩺 수술',
+        cov: [['질병·상해 수술비', '수술 종류(1~5종 등)나 수술명에 따라 정해진 금액'], ['실손의료비', '실제 낸 병원비(약값 포함)에서 공제금액·자기부담금을 뺀 만큼 받아요']],
+        docs: ['form', 'id', 'bank', 'receipt', 'detail', 'surgery', 'diag'],
+        tips: ['내시경으로 용종을 떼어 낸 것도 수술비 대상인 상품이 많아요. 수술확인서의 수술코드를 보험사에 알려 주세요.'] },
+      { id: 'cancer', label: '🎗️ 암 진단',
+        cov: [['암 진단비', '처음 진단받았을 때 정해진 금액'], ['암 수술비·입원일당·항암치료비', '가입한 특약에 따라'], ['실손의료비', '실제 낸 병원비(약값 포함)에서 공제금액·자기부담금을 뺀 만큼 받아요']],
+        docs: ['form', 'id', 'bank', 'diag', 'biopsy', 'receipt', 'detail'],
+        tips: ['갑상선암·기타 피부암 등은 "유사암"으로 진단비가 적게 정해진 상품이 많아요.', '가입 직후(보통 90일)에는 보장되지 않고, 1~2년 안에는 절반만 주는 조건이 있는지 확인해 보세요.'] },
+      { id: 'brainheart', label: '❤️ 뇌·심장 질환 진단',
+        cov: [['뇌혈관질환·뇌졸중·뇌출혈 진단비', '특약마다 보장하는 병의 범위가 달라요'], ['허혈성심장질환·급성심근경색 진단비', '특약마다 범위가 달라요'], ['수술비·입원일당·실손', '가입한 보장에 따라']],
+        docs: ['form', 'id', 'bank', 'diag', 'imaging', 'receipt', 'detail'],
+        tips: ['같은 "뇌" 진단비라도 뇌혈관질환 > 뇌졸중 > 뇌출혈 순으로 보장 범위가 좁아져요. 내 특약 이름을 확인해 보세요.'] },
+      { id: 'injury', label: '🦴 골절·다침',
+        cov: [['골절 진단비', '뼈가 부러졌을 때 정해진 금액'], ['깁스 치료비', '깁스를 했을 때(가입한 경우)'], ['상해 수술비·입원일당·실손', '가입한 보장에 따라']],
+        docs: ['form', 'bank', 'diag', 'xray', 'receipt', 'detail'],
+        tips: ['치아가 부러진 것은 골절 진단비에서 빠지는 상품이 많아요.'] },
+      { id: 'car', label: '🚗 교통사고',
+        cov: [['자동차보험', '치료비는 보통 상대방 또는 내 자동차보험으로 먼저 처리해요'], ['운전자보험', '교통사고처리지원금·벌금·변호사선임비용 등(내가 운전자일 때, 조건이 있어요)'], ['상해 정액 보장', '골절 진단비·입원일당 같은 정액 보장은 자동차보험과 별개로 받을 수 있는 경우가 많아요']],
+        docs: ['form', 'bank', 'accident', 'diag', 'receipt'],
+        tips: ['자동차보험으로 처리된 치료비는 실손에서 보상하지 않거나 일부만 보상해요.'] },
+      { id: 'dental', label: '🦷 치과 치료',
+        cov: [['치아보험', '충전(때우기)·크라운·임플란트 등 보철·보존 치료비(가입한 경우)'], ['실손의료비', '건강보험이 되는(급여) 치과 치료 위주로 보상해요']],
+        docs: ['form', 'bank', 'dental', 'receipt', 'detail'],
+        tips: ['치아보험은 가입 후 일정 기간 보장이 안 되거나 줄어드는 조건이 있는 경우가 많아요.', '미용 목적 치료나 대부분의 비급여 보철은 실손에서 빠져요.'] }
+    ];
+
+    const picked = new Set();
+
+    function el(tag, text) { const e = document.createElement(tag); if (text) e.textContent = text; return e; }
+
+    function render() {
+      const result = document.getElementById('result');
+      if (picked.size === 0) { result.hidden = true; return; }
+      const chosen = SITUATIONS.filter(s => picked.has(s.id));
+
+      // 보장: 같은 이름은 한 번만, 어느 상황에서 나왔는지 표시
+      const covBox = document.getElementById('coverages');
+      covBox.innerHTML = '';
+      const seen = new Map();
+      for (const s of chosen) {
+        for (const [name, desc] of s.cov) {
+          if (seen.has(name)) { seen.get(name).push(s.label); continue; }
+          seen.set(name, [s.label]);
+          const div = el('div'); div.className = 'cov';
+          div.append(el('strong', name), el('span', desc));
+          const from = el('div'); from.className = 'from'; from.dataset.name = name;
+          div.append(from);
+          covBox.append(div);
+        }
+      }
+      covBox.querySelectorAll('.from').forEach(f => { if (chosen.length > 1) f.textContent = seen.get(f.dataset.name).join(' · '); });
+
+      // 서류: 겹치는 것은 한 번만, 정해 둔 순서대로
+      const docKeys = Object.keys(DOCS).filter(k => chosen.some(s => s.docs.includes(k)));
+      const docList = document.getElementById('docs');
+      docList.innerHTML = '';
+      for (const k of docKeys) {
+        const li = el('li'); const label = el('label'); const box = el('input'); box.type = 'checkbox';
+        const text = el('span', DOCS[k][0]); text.append(el('small', DOCS[k][1]));
+        label.append(box, text); li.append(label); docList.append(li);
+      }
+
+      const tipList = document.getElementById('tips');
+      tipList.innerHTML = '';
+      for (const s of chosen) for (const t of s.tips) tipList.append(el('li', t));
+
+      result.hidden = false;
+    }
+
+    function buildChips() {
+      const box = document.getElementById('chips');
+      for (const s of SITUATIONS) {
+        const b = el('button', s.label); b.type = 'button'; b.className = 'chip';
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', () => {
+          if (picked.has(s.id)) picked.delete(s.id); else picked.add(s.id);
+          b.setAttribute('aria-pressed', String(picked.has(s.id)));
+          render();
+        });
+        box.append(b);
+      }
+    }
+
+    // 청구 기한: 사고일 + 3년. 2월 29일은 다음 해 3월 1일이 아닌 2월 28일로 맞춥니다.
+    function addYears(dateStr, years) {
+      const [y, m, d] = dateStr.split('-').map(Number);
+      const target = new Date(Date.UTC(y + years, m - 1, 1));
+      const lastDay = new Date(Date.UTC(y + years, m, 0)).getUTCDate();
+      target.setUTCDate(Math.min(d, lastDay));
+      return target;
+    }
+
+    function calcDeadline() {
+      const input = document.getElementById('event-date');
+      if (!input.value) { input.focus(); return; }
+      const out = document.getElementById('deadline');
+      const deadline = addYears(input.value, 3);
+      const now = new Date();
+      const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+      const days = Math.round((deadline - today) / 86400000);
+      const text = `${deadline.getUTCFullYear()}년 ${deadline.getUTCMonth() + 1}월 ${deadline.getUTCDate()}일`;
+      out.className = 'deadline';
+      out.textContent = '';
+      if (days >= 0) {
+        out.append('청구 기한은 ', el('strong', text), ` 무렵까지예요. 앞으로 약 ${days.toLocaleString('ko-KR')}일 남았어요.`);
+      } else {
+        out.classList.add('late');
+        out.append('기한(', el('strong', text), ')이 지난 것 같아요. 사정에 따라 받을 수 있는 경우도 있으니 보험사에 한 번 문의해 보세요.');
+      }
+      out.hidden = false;
+    }
+
+    buildChips();
+    document.getElementById('deadline-btn').addEventListener('click', calcDeadline);
+    document.getElementById('event-date').addEventListener('keydown', e => { if (e.key === 'Enter') calcDeadline(); });
+    document.getElementById('event-date').max = new Date().toISOString().slice(0, 10);
+  </script>
+</body>
+</html>

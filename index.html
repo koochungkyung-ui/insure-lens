@@ -49,6 +49,11 @@
     .wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px 48px; }
     header h1 { margin: 0; font-size: 26px; }
     header p { margin: 4px 0 0; color: var(--muted); }
+    nav.tools { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    nav.tools a { padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card);
+                  color: var(--text); text-decoration: none; font-size: 14px; font-weight: 600; }
+    nav.tools a[aria-current="page"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+    @media (prefers-color-scheme: dark) { nav.tools a[aria-current="page"] { color: #042f2e; } }
     .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; margin-top: 16px; }
     h2 { margin: 0 0 12px; font-size: 19px; }
     h3 { margin: 16px 0 6px; font-size: 16px; }
@@ -91,6 +96,10 @@
     <header>
       <h1>🔍 보험 돋보기</h1>
       <p>내 실손보험은 몇 세대일까? 가입한 날짜로 바로 확인해 보세요.</p>
+      <nav class="tools" aria-label="도구">
+        <a href="./" aria-current="page">실손 세대 확인</a>
+        <a href="claim">보험금 청구 체크리스트</a>
+      </nav>
     </header>
 
     <section class="card" aria-labelledby="calc-title">
