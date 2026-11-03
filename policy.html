@@ -384,8 +384,8 @@
       return b;
     }
 
-    // 글자 인식이 금액의 쉼표를 "3. 000만원"처럼 읽은 것을 "3,000만원"으로 되돌립니다.
-    const fixOcr = t => t.replace(/(\d)\s*[.,]\s+(\d{3})(?=\s*(?:만|억|천|원))/g, '$1,$2');
+    // 글자 인식이 금액을 "3. 000만원", "5000만뭔"처럼 읽은 것을 "3,000만원", "5000만원"으로 되돌립니다.
+    const fixOcr = t => t.replace(/(\d\s*만)\s*[뭔웜월윈]/g, '$1원').replace(/(\d)\s*[.,]\s+(\d{3})(?=\s*(?:만|억|천|원))/g, '$1,$2');
     // "5000 만원" → "5,000만원"
     const fmtAmount = s => tidy(s).replace(/\s+(?=[만억천원])/g, '').replace(/\d{4,}/g, n => Number(n).toLocaleString('en-US'));
 
@@ -428,7 +428,7 @@
     // 보장 종류를 알아내고, 그 설명 안에서 앞뒤가 넓게 띄어진 금액(가입금액 칸)과 짝짓습니다. 문장 속 금액("10만원 한도", "5000만원입니다")은 쓰지 않습니다.
     // 글자 인식이 "발생하면"→"발샘하면", "통원"→"롱원"처럼 한 글자씩 틀리기도 해서, 원인(다쳐서·질병으로) 뒤의
     // "○원치료"만 봅니다. ○가 입(업·읍)이면 입원, 그 밖(통·롱·동…)이면 통원입니다.
-    const DESC_START = /(?:다[쳐처져]서|상해로|질\S?으로)\s*(\S)원\s*치료|(?:MRI|MRA)[^\n]{0,30}(?:받아|발생)/;
+    const DESC_START = /(?:다[쳐처져]서|상해로|질\S?으로)\s*(\S)[원뭔웜윈]\s*치료|(?:MRI|MRA)[^\n]{0,30}(?:받아|발생)/;
     const COLUMN_AMOUNT = /(?:^|\s{2,})(\d[\d,]*\s*(?:억|천만|천|백만|만)?\s*원)(?=\s{2,}|\s*$)/;
     function describedRows(text) {
       const blocks = [];
@@ -441,7 +441,9 @@
         const a = !cur.amount && line.match(COLUMN_AMOUNT);
         if (a) cur.amount = fmtAmount(a[1]);
       }
-      return blocks.map(b => {
+      // 실손 설명에는 "실제 부담한 … 공제금액 / 의료급여"가 꼭 들어갑니다. 이 말이 없거나 금액을 못 찾은 덩어리는
+      // 다른 보장의 안내 문장(예: "질병으로 입원치료를 받은 경우…")일 수 있어 뺍니다.
+      return blocks.filter(b => /실제\s*부담|공제\s*금액|의료\s*급여/.test(b.body) && (b.amount || /최고\s*한도/.test(b.body))).map(b => {
         // 실손은 가입금액이 설명의 "최고한도는 …입니다"와 같아서, 금액 칸이 잘못 읽혔는지 견줘 봅니다.
         const lim = b.body.replace(/\s+/g, '').match(/최고한도[는은]?(\d[\d,]*만원)/);
         const limit = lim ? fmtAmount(lim[1]) : '';
@@ -686,18 +688,19 @@
     let pdfPassword;
     let ocrBusy = false;
 
-    // PDF 쪽마다 그림으로 그립니다(최대 10쪽, 긴 변 약 2000px).
+    // PDF 쪽마다 그림으로 그립니다(최대 10쪽, 긴 변 약 2400px). 종이 한 장 전체라 글씨가 작아서 크게 그리고,
+    // 스캔한 종이의 그림자·누런 바탕을 지우려고 흑백 선명 처리를 한 뒤 읽습니다.
     async function pdfImages() {
       const doc = await pdfjsLib.getDocument({ data: new Uint8Array(await pdfFile.arrayBuffer()), password: pdfPassword }).promise;
       const out = [];
       for (let n = 1; n <= Math.min(doc.numPages, 10); n++) {
         const page = await doc.getPage(n);
         const base = page.getViewport({ scale: 1 });
-        const vp = page.getViewport({ scale: Math.min(3, 2000 / Math.max(base.width, base.height)) });
+        const vp = page.getViewport({ scale: Math.min(4, 2400 / Math.max(base.width, base.height)) });
         const c = document.createElement('canvas');
         c.width = Math.round(vp.width); c.height = Math.round(vp.height);
         await page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
-        out.push(c);
+        out.push(enhance(c));
       }
       return out;
     }
@@ -714,18 +717,17 @@
       return c;
     }
 
-    // 긴 변이 max 픽셀이 되도록 줄인 캔버스(이미 작으면 그대로)
-    function scaled(img, max) {
-      const s = Math.min(1, max / Math.max(img.width, img.height));
-      if (s === 1) return img;
+    // 가운데를 원래 크기 그대로 잘라 낸 캔버스(방향 확인용). 줄이면 작은 글씨가 뭉개져 방향을 잘못 고르기 쉬워서 자릅니다.
+    function centerTile(img, size) {
+      const w = Math.min(size, img.width), h = Math.min(size, img.height);
       const c = document.createElement('canvas');
-      c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
-      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, (img.width - w) / 2, (img.height - h) / 2, w, h, 0, 0, w, h);
       return c;
     }
 
     // 그림들에서 글자를 읽어 한 글로 잇습니다. say(문구)로 진행 상황을 알립니다.
-    // 쪽이 옆으로·거꾸로 놓인 경우가 많아, 먼저 작게 줄인 그림으로 네 방향을 빨리 읽어 자신감이 가장 높은 방향을 고른 뒤
+    // 쪽이 옆으로·거꾸로 놓인 경우가 많아, 먼저 가운데 조각으로 네 방향을 빨리 읽어 자신감이 가장 높은 방향을 고른 뒤
     // 그 방향으로 한 번만 제대로 읽습니다(큰 그림을 여러 번 읽으면 느리고 휴대폰 메모리가 모자랄 수 있어서).
     async function ocrImages(images, say) {
       say('글자 인식 도구를 불러오고 있어요…');
@@ -744,11 +746,11 @@
         const parts = [], angles = [];
         let worst = 100;
         for (let n = 0; n < images.length; n++) {
-          const img = images[n], small = scaled(img, 900), label = `${n + 1}/${images.length}쪽`;
+          const img = images[n], tile = centerTile(img, 1100), label = `${n + 1}/${images.length}쪽`;
           let angle = 0, top = -1;
           for (const [i, deg] of [0, 90, 270, 180].entries()) {
             status = `글자 방향을 확인하고 있어요… ${label} (${i + 1}/4)`;
-            const conf = (await worker.recognize(deg ? rotated(small, deg) : small)).data.confidence;
+            const conf = (await worker.recognize(deg ? rotated(tile, deg) : tile)).data.confidence;
             if (conf > top) { top = conf; angle = deg; }
             if (deg === 0 && conf >= 75) break; // 바로 서 있으면 더 돌려 보지 않습니다
           }
@@ -773,12 +775,15 @@
         const images = await getImages();
         const { text, confidence, angles } = await ocrImages(images, say);
         if (done) done(angles, images);
-        if (tidy(text).length < 10 || confidence < 40) {
-          say('글자를 제대로 읽지 못했어요. 글씨가 작거나 흐릿하면 잘 안 읽혀요. 위의 "더 잘 읽히게 하는 요령"대로 보장 표 부분만 크게, 밝고 반듯하게 다시 찍거나, "직접 입력하기"로 넣어 주세요.');
+        if (tidy(text).length < 10) {
+          say('글자를 거의 읽지 못했어요. 글씨가 작거나 흐릿하면 잘 안 읽혀요. 위의 "더 잘 읽히게 하는 요령"대로 보장 표 부분만 크게, 밝고 반듯하게 다시 찍거나, "직접 입력하기"로 넣어 주세요.');
           return;
         }
+        // 자신감이 낮아도 쓸 만한 경우가 많아 결과는 보여 주고, 낮으면 꼭 비교하라고 알립니다.
         document.getElementById('src').value = text;
-        say('글자를 읽었어요. 자동으로 읽은 글이라 틀린 글자가 있을 수 있어요. 아래 3번 표에서 원본과 비교해 고쳐 주세요.');
+        say(confidence < 45
+          ? '글자를 읽었지만 흐릿하게 읽힌 곳이 많아요. 아래 3번 표에서 원본과 꼭 비교해 고쳐 주세요. 많이 틀리면 "더 잘 읽히게 하는 요령"대로 보장 표 부분만 크게 다시 찍거나 "직접 입력하기"를 써 주세요.'
+          : '글자를 읽었어요. 자동으로 읽은 글이라 틀린 글자가 있을 수 있어요. 아래 3번 표에서 원본과 비교해 고쳐 주세요.');
         findCoverages();
       } catch (e) {
         console.error(e);
