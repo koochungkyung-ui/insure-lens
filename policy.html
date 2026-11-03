@@ -373,7 +373,48 @@
       return tidy(line.replace(DATE, ' ').replace(AMOUNT, ' ').replace(PERIOD, ' ')
         .replace(/\[(?:비?갱신형?)\]|\(?비?갱신형\)?/g, ' ')
         .replace(/기본계약|선택계약|주계약|의무부가|월납|연납|일시납/g, ' ')
-        .replace(/^[\s\d.)\]①-⑳·•*\-|_ㅣ!:;,'"`~]+/, '').replace(/[\s|:：\-]+$/, ''));
+        .replace(/^[\s\d.)\]①-⑳·•*\-|_ㅣ!:;,，、'"`~]+/, '').replace(/^\([^)]{1,6}\)\s*/, '') // "(특약형)" 같은 앞 괄호
+        .replace(/\(\s*[|!ㅣ\s]*\)/g, ' ').replace(/[\s|:：\-]+$/, ''));
+    }
+
+    // 실손 보장의 표준 이름(청약서·증권에 흔히 쓰는 이름). 글자 인식으로 틀린 이름을 여기에 맞춥니다.
+    const SILSON_NAMES = ['상해입원의료비', '상해외래의료비', '상해약제의료비', '상해통원의료비', '질병입원의료비', '질병외래의료비',
+      '질병약제의료비', '질병통원의료비', '비급여도수치료·체외충격파치료·증식치료의료비', '비급여주사료의료비',
+      '비급여자기공명영상진단의료비', '상해급여의료비', '상해비급여의료비', '질병급여의료비', '질병비급여의료비'];
+    const hangul = s => s.replace(/[^가-힣]/g, '');
+
+    // 한글을 자음·모음으로 쪼갭니다. "인운"과 "입원"처럼 모양이 비슷한 글자 틀림을 글자 통째보다 너그럽게 비교하려고요.
+    function jamo(s) {
+      const out = [];
+      for (const ch of s) {
+        const c = ch.charCodeAt(0) - 0xAC00;
+        if (c < 0 || c >= 11172) continue;
+        out.push('c' + Math.floor(c / 588), 'v' + Math.floor(c % 588 / 28));
+        if (c % 28) out.push('j' + c % 28);
+      }
+      return out;
+    }
+
+    // 자음·모음 단위 편집 거리로 본 닮은 정도(0~1)
+    function similar(a, b) {
+      const x = jamo(a), y = jamo(b);
+      let prev = Array.from({ length: y.length + 1 }, (_, j) => j);
+      for (let i = 1; i <= x.length; i++) {
+        const cur = [i];
+        for (let j = 1; j <= y.length; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (x[i - 1] === y[j - 1] ? 0 : 1));
+        prev = cur;
+      }
+      return 1 - prev[y.length] / Math.max(x.length, y.length, 1);
+    }
+
+    // "신질봉인운의르비" → "질병입원의료비". 의료비처럼 끝나는 이름만, 충분히 닮았을 때만 바꿉니다(이미 알려진 이름은 그대로).
+    function canonical(name) {
+      const core = hangul(name.replace(/\([^)]*\)?/g, ''));
+      if (core.length < 4 || !/의료|의르|료비|르비|료빈|의\S비$/.test(core)) return null;
+      if ([...SILSON_NAMES, ...NAMES].some(n => hangul(n.replace(/\([^)]*\)/g, '')) === core)) return null;
+      let best = null, top = 0;
+      for (const n of SILSON_NAMES) { const sim = similar(core, hangul(n)); if (sim > top) { top = sim; best = n; } }
+      return top >= 0.6 ? { name: best, read: core } : null;
     }
 
     function badgesOf(raw) {
@@ -389,9 +430,11 @@
     }
 
     // 글자 인식이 금액을 "3. 000만원", "5000만뭔"처럼 읽은 것을 "3,000만원", "5000만원"으로 되돌립니다.
-    const fixOcr = t => t.replace(/(\d\s*만)\s*[뭔웜월윈]/g, '$1원').replace(/(\d)\s*[.,]\s+(\d{3})(?=\s*(?:만|억|천|원))/g, '$1,$2');
-    // "5000 만원" → "5,000만원"
-    const fmtAmount = s => tidy(s).replace(/\s+(?=[만억천원])/g, '').replace(/\d{4,}/g, n => Number(n).toLocaleString('en-US'));
+    // 금액 단위도 "5천하원", "25간워", "5마워", "250단원"처럼 읽혀서 "5천만원", "25만원" 등으로 맞춥니다.
+    const fixOcr = t => t.replace(/(\d)\s*(천)?\s*[만하간마단]\s*[원워웜뭔월윈](?![가-힣])/g, '$1$2만원').replace(/(\d\s*만)\s*[뭔웜월윈]/g, '$1원').replace(/(\d)\s*[.,]\s+(\d{3})(?=\s*(?:만|억|천|원))/g, '$1,$2');
+    // "5000 만원" → "5,000만원", "5천만원" → "5,000만원"
+    const fmtAmount = s => tidy(s).replace(/\s+(?=[만억천원])/g, '').replace(/^(\d+)천만/, (_, n) => n * 1000 + '만')
+      .replace(/\d{4,}/g, n => Number(n).toLocaleString('en-US'));
 
     // 붙여 넣은 글에서 보장 후보를 찾습니다. 글자 인식이 뒤섞일 수 있어, 결과는 사용자가 표에서 고칩니다.
     function parseCoverages(text) {
@@ -407,7 +450,9 @@
         if (/^\s*(상해|질병)\s*$/.test(line)) { section = tidy(line); pending = null; continue; }
         if (SENTENCE.test(line)) { pending = null; orphan = null; continue; }
         const amounts = line.match(AMOUNT) || [];
-        const name = nameOf(line);
+        // 표 한 줄은 "이름 | 가입금액 | 보험료 | 기간" 순서라, 금액 앞부분이 이름입니다(뒤 칸의 잡글자가 섞이지 않게).
+        const before = amounts.length ? nameOf(line.slice(0, line.search(AMOUNT))) : '';
+        const name = /[가-힣]{2,}/.test(before) ? before : nameOf(line);
         const nameLike = /[가-힣]{2,}/.test(name) && !NOT_COVERAGE.test(name) && COVERAGE_WORD.test(name);
         if (!amounts.length) {
           // 이름 바로 다음 줄이 금액이면 그 금액과, 아니면 앞서 남은 금액과 짝짓습니다.
@@ -485,6 +530,8 @@
       const premium = amounts.length > 1 && /^[\d,]+원$/.test(last) ? last : '';
       const memo = [...new Set((raw.replace(DATE, ' ').match(PERIOD) || []).map(tidy))];
       if (premium) memo.push(`보험료 ${premium}`);
+      const fix = canonical(name);
+      if (fix) { name = fix.name; memo.push(`이름 자동 보정(읽은 글: ${fix.read})`); }
       const known = badgesOf(name + ' ' + memo.join(' ')).map(b => b[0]);
       for (const [b] of badgesOf(raw)) if (!known.includes(b)) memo.push(b);
       return { name, amount: fmtAmount(amounts[0]), memo: memo.join(' ') };
