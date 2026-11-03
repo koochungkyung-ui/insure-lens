@@ -90,6 +90,23 @@
                border: 1px solid var(--accent); color: var(--accent); background: var(--card); }
     #pw-row input { flex: 1; min-width: 0; font-size: 16px; padding: 8px 10px; border-radius: 8px;
                     border: 1px solid var(--line); background: var(--bg); color: var(--text); }
+    #crop-canvas { display: block; margin: 8px auto 0; touch-action: none; border-radius: 8px; }
+    #flat-canvas { display: block; width: 100%; height: auto; margin-top: 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+    button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+    .pages { display: flex; gap: 10px; flex-wrap: wrap; }
+    .pages figure { position: relative; margin: 0; width: 84px; }
+    .pages img { display: block; width: 100%; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+    .pages figcaption { font-size: 12px; color: var(--muted); text-align: center; }
+    .pages button { position: absolute; top: -8px; right: -8px; width: 26px; height: 26px; padding: 0; border-radius: 50%;
+                    border: 1px solid var(--line); background: var(--card); color: var(--text); font-size: 13px; }
+    #print-area { display: none; }
+    @media print {
+      body > *:not(#print-area) { display: none !important; }
+      body { background: #fff; }
+      #print-area { display: block; }
+      #print-area img { display: block; width: 100%; height: auto; max-height: 270mm; object-fit: contain; break-after: page; }
+      @page { margin: 10mm; }
+    }
     ul.tips { margin: 10px 0 0; padding-left: 20px; font-size: 14px; }
     ul.check { padding-left: 20px; margin: 6px 0 0; }
     ul.check li { margin: 6px 0; }
@@ -170,7 +187,7 @@
           <li>파일을 마우스 오른쪽 버튼으로 누르고 <strong>연결 앱 → Google 문서</strong>를 골라요. 사진 속 글자가 문서로 바뀌어요.</li>
           <li>바뀐 글을 복사해 아래 칸에 붙여 넣어요. 파일이 너무 크면 안 될 수 있어서, 보장 내용이 있는 장만 올리는 게 좋아요.</li>
         </ol>
-        <p class="hint">스캐너로 만든 PDF는 글자가 아닌 그림이라, 아래 "PDF 파일 올리기"로는 읽지 못해요. 이 방법을 써 주세요.</p>
+        <p class="hint">스캐너로 만든 PDF는 글자가 아닌 그림이에요. 아래 "PDF 파일 올리기"로 올리면 "사진에서 글자 읽기"로 읽어 볼 수 있지만, 이 방법이 더 정확할 때가 많아요.</p>
       </details>
       <p style="margin:14px 0 0;font-weight:700">더 잘 읽히게 하는 요령</p>
       <ul class="tips">
@@ -181,6 +198,51 @@
       <p class="hint">한 장에 다 안 나오면 여러 장을 차례로 복사해 아래 칸에 이어 붙이면 돼요. 이름·주민등록번호·증권번호는 지우고 붙여 넣어도 정리에 지장이 없어요.</p>
     </section>
 
+    <section class="card" aria-labelledby="scan-title">
+      <h2 id="scan-title">📷 카메라로 스캔해서 인쇄·PDF 저장</h2>
+      <p style="margin:0">종이 증권을 찍어 반듯하게 펴고 선명하게 만든 뒤, 인쇄하거나 PDF로 저장해요. 사진은 이 기기 안에서만 처리하고 어디에도 보내지 않아요.</p>
+      <div class="row">
+        <label class="filebtn" for="cam">📷 카메라로 찍기</label>
+        <input type="file" id="cam" accept="image/*" capture="environment" hidden>
+        <label class="filebtn" for="pick">🖼️ 사진 고르기</label>
+        <input type="file" id="pick" accept="image/*" hidden>
+      </div>
+      <p class="hint" id="scan-msg" hidden></p>
+
+      <div id="crop" hidden>
+        <p class="hint">네 모서리의 동그라미를 손가락으로 끌어 <strong>종이 모서리</strong>에 맞춰 주세요.</p>
+        <canvas id="crop-canvas" aria-label="모서리 맞추기 화면"></canvas>
+        <div class="row">
+          <button type="button" class="sub" id="rotate-btn">↻ 돌리기</button>
+          <button type="button" class="sub" id="corner-btn">모서리 처음대로</button>
+          <button type="button" class="main" id="flat-btn">반듯하게 펴기</button>
+        </div>
+      </div>
+
+      <div id="flat" hidden>
+        <div class="row" role="group" aria-label="보기 방식">
+          <button type="button" class="sub" id="mode-bw" aria-pressed="true">흑백 선명</button>
+          <button type="button" class="sub" id="mode-color" aria-pressed="false">컬러</button>
+        </div>
+        <canvas id="flat-canvas" aria-label="반듯하게 편 문서"></canvas>
+        <div class="row">
+          <button type="button" class="main" id="keep-btn">이 장 담기</button>
+          <button type="button" class="sub" id="recrop-btn">모서리 다시 맞추기</button>
+        </div>
+      </div>
+
+      <div id="pages-box" hidden>
+        <h3>담은 문서 <span id="page-count"></span></h3>
+        <div class="pages" id="pages"></div>
+        <div class="row">
+          <button type="button" class="main" id="print-btn">🖨️ 인쇄</button>
+          <button type="button" class="sub" id="save-btn">PDF로 저장</button>
+          <button type="button" class="sub" id="ocr-scan-btn">🔍 글자 읽어서 보장 찾기</button>
+        </div>
+        <p class="hint">여러 장이면 "카메라로 찍기"를 다시 눌러 계속 담으면 한 파일로 묶여요. "글자 읽어서 보장 찾기"를 누르면 담은 문서에서 이 기기가 직접 글자를 읽어 아래 보장 찾기로 이어 줘요. 처음 한 번은 한국어 인식 자료(약 3MB)를 내려받느라 시간이 걸려요.</p>
+      </div>
+    </section>
+
     <section class="card" aria-labelledby="paste-title">
       <h2 id="paste-title">2. 붙여 넣기 또는 PDF 올리기</h2>
       <div class="row" style="margin:0 0 10px">
@@ -188,6 +250,9 @@
         <input type="file" id="pdf" accept="application/pdf,.pdf" hidden>
       </div>
       <p class="hint" id="pdf-msg" hidden></p>
+      <div class="row" id="ocr-pdf-row" hidden>
+        <button type="button" class="main" id="ocr-pdf-btn">🔍 사진에서 글자 읽기</button>
+      </div>
       <div class="row" id="pw-row" hidden>
         <input type="password" id="pw" placeholder="PDF 비밀번호" aria-label="PDF 비밀번호" autocomplete="off">
         <button type="button" class="sub" id="pw-btn">열기</button>
@@ -250,6 +315,8 @@
 
     <footer><a href="about">소개</a> · <a href="privacy">개인정보처리방침</a> · <a href="mailto:contact@cloverpick.app">문의</a><br>© 2026 보험 돋보기 · insure.cloverpick.app</footer>
   </div>
+
+  <div id="print-area" aria-hidden="true"></div>
 
   <script src="terms.js"></script>
   <script>
@@ -328,7 +395,7 @@
       return tidy(line.replace(DATE, ' ').replace(AMOUNT, ' ').replace(PERIOD, ' ')
         .replace(/\[(?:비?갱신형?)\]|\(?비?갱신형\)?/g, ' ')
         .replace(/기본계약|선택계약|주계약|의무부가|월납|연납|일시납/g, ' ')
-        .replace(/^[\s\d.)\]①-⑳·•*\-|]+/, '').replace(/[\s|:：\-]+$/, ''));
+        .replace(/^[\s\d.)\]①-⑳·•*\-|_ㅣ!:;,'"`~]+/, '').replace(/[\s|:：\-]+$/, ''));
     }
 
     function badgesOf(raw) {
@@ -523,17 +590,22 @@
 
     // PDF 읽기: 파일을 고를 때만 pdf.js를 불러오고, 파일은 이 기기 안에서만 읽습니다.
     const PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
-    let pdfReady = null;
     let pdfFile = null;
-    function loadPdfJs() {
-      if (!pdfReady) pdfReady = new Promise((ok, fail) => {
+    // 바깥 도구는 필요할 때 한 번만 불러옵니다. 실패하면 다음에 다시 시도합니다.
+    const scripts = {};
+    function loadScript(url) {
+      if (!scripts[url]) scripts[url] = new Promise((ok, fail) => {
         const s = document.createElement('script');
-        s.src = PDFJS + 'pdf.min.js';
-        s.onload = () => { pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS + 'pdf.worker.min.js'; ok(); };
-        s.onerror = () => { pdfReady = null; fail(new Error('load')); };
+        s.src = url;
+        s.onload = ok;
+        s.onerror = () => { delete scripts[url]; s.remove(); fail(new Error('load')); };
         document.head.append(s);
       });
-      return pdfReady;
+      return scripts[url];
+    }
+    async function loadPdfJs() {
+      await loadScript(PDFJS + 'pdf.min.js');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS + 'pdf.worker.min.js';
     }
 
     // 같은 높이의 글 조각을 한 줄로 모으고, 왼쪽부터 이어 붙입니다(떨어져 있으면 띄어 씀).
@@ -572,7 +644,9 @@
         document.getElementById('pw-row').hidden = true;
         document.getElementById('pw').value = '';
         if (tidy(text).length < 20) {
-          pdfMsg('이 PDF에서는 글자를 찾지 못했어요. 스캐너로 만든 PDF처럼 글자가 그림으로 들어 있으면 읽을 수 없어요. 위 "컴퓨터 스캐너로 스캔했다면" 방법을 써 주세요.');
+          pdfPassword = password;
+          document.getElementById('ocr-pdf-row').hidden = false;
+          pdfMsg('이 PDF는 글자가 사진(그림)으로 들어 있어요. 아래 "사진에서 글자 읽기"를 누르면 이 기기가 직접 글자를 읽어 볼게요. 처음 한 번은 한국어 인식 자료(약 3MB)를 내려받느라 시간이 걸려요.');
           return;
         }
         document.getElementById('src').value = text;
@@ -591,14 +665,376 @@
       }
     }
 
+    // ── 글자 인식(OCR): 사진 PDF·스캔한 문서에서 이 기기가 직접 글자를 읽습니다(Tesseract.js, 한국어) ──
+    const TESS = 'https://cdn.jsdelivr.net/npm/';
+    let pdfPassword;
+    let ocrBusy = false;
+
+    // PDF 쪽마다 그림으로 그립니다(최대 10쪽, 긴 변 약 2000px).
+    async function pdfImages() {
+      const doc = await pdfjsLib.getDocument({ data: new Uint8Array(await pdfFile.arrayBuffer()), password: pdfPassword }).promise;
+      const out = [];
+      for (let n = 1; n <= Math.min(doc.numPages, 10); n++) {
+        const page = await doc.getPage(n);
+        const base = page.getViewport({ scale: 1 });
+        const vp = page.getViewport({ scale: Math.min(3, 2000 / Math.max(base.width, base.height)) });
+        const c = document.createElement('canvas');
+        c.width = Math.round(vp.width); c.height = Math.round(vp.height);
+        await page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
+        out.push(c);
+      }
+      return out;
+    }
+
+    // 그림을 시계 방향으로 deg(90·180·270)만큼 돌린 새 캔버스
+    function rotated(img, deg) {
+      const w = img.width, h = img.height, side = deg % 180 !== 0;
+      const c = document.createElement('canvas');
+      c.width = side ? h : w; c.height = side ? w : h;
+      const g = c.getContext('2d');
+      g.translate(c.width / 2, c.height / 2);
+      g.rotate(deg * Math.PI / 180);
+      g.drawImage(img, -w / 2, -h / 2);
+      return c;
+    }
+
+    // 그림들에서 글자를 읽어 한 글로 잇습니다. say(문구)로 진행 상황을 알립니다.
+    async function ocrImages(images, say) {
+      say('글자 인식 도구를 불러오고 있어요…');
+      await loadScript(TESS + 'tesseract.js@5.1.1/dist/tesseract.min.js');
+      let page = 1;
+      const worker = await Tesseract.createWorker('kor', 1, {
+        workerPath: TESS + 'tesseract.js@5.1.1/dist/worker.min.js',
+        corePath: TESS + 'tesseract.js-core@5.1.1',
+        langPath: TESS + '@tesseract.js-data/kor@1.0.0/4.0.0_best_int',
+        logger: m => {
+          if (m.status === 'loading language traineddata') say('한국어 인식 자료를 내려받고 있어요…');
+          else if (m.status === 'recognizing text') say(`글자를 읽고 있어요… ${page}/${images.length}쪽 ${Math.round(m.progress * 100)}%`);
+        }
+      });
+      try {
+        const parts = [];
+        let worst = 100;
+        for (const img of images) {
+          // 쪽이 거꾸로·옆으로 놓인 경우가 많아, 자신감이 낮으면 돌려 가며 다시 읽고 가장 나은 쪽을 고릅니다.
+          let best = (await worker.recognize(img)).data;
+          for (const deg of [180, 90, 270]) {
+            if (best.confidence >= 70) break;
+            say(`글자가 잘 안 읽혀서 방향을 바꿔 다시 읽고 있어요… ${page}/${images.length}쪽 (${deg}°)`);
+            const d = (await worker.recognize(rotated(img, deg))).data;
+            if (d.confidence > best.confidence) best = d;
+          }
+          parts.push(best.text);
+          worst = Math.min(worst, best.confidence);
+          page++;
+        }
+        return { text: parts.join('\n'), confidence: worst };
+      } finally {
+        await worker.terminate();
+      }
+    }
+
+    async function runOcr(getImages, say, btn) {
+      if (ocrBusy) return;
+      ocrBusy = true; btn.disabled = true;
+      try {
+        const { text, confidence } = await ocrImages(await getImages(), say);
+        if (tidy(text).length < 10 || confidence < 40) {
+          say('글자를 제대로 읽지 못했어요. 글씨가 작거나 흐릿하면 잘 안 읽혀요. 보장 표 부분만 크게, 밝고 반듯하게 다시 찍거나, 위의 휴대폰 글자 인식(갤럭시 T 버튼, 아이폰 길게 누르기) 방법을 써 주세요.');
+          return;
+        }
+        document.getElementById('src').value = text;
+        say('글자를 읽었어요. 자동으로 읽은 글이라 틀린 글자가 있을 수 있어요. 아래 3번 표에서 원본과 비교해 고쳐 주세요.');
+        findCoverages();
+      } catch (e) {
+        say(e && e.message === 'load'
+          ? '글자 인식 도구를 불러오지 못했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.'
+          : '글자를 읽는 중에 문제가 생겼어요. 휴대폰 메모리가 부족할 수 있어요. 쪽 수를 줄이거나 위의 휴대폰 글자 인식 방법을 써 주세요.');
+      } finally {
+        ocrBusy = false; btn.disabled = false;
+      }
+    }
+
+    document.getElementById('ocr-pdf-btn').addEventListener('click', e => runOcr(pdfImages, pdfMsg, e.currentTarget));
+    document.getElementById('ocr-scan-btn').addEventListener('click', e => runOcr(
+      () => Promise.all(pages.map(pg => { const img = new Image(); img.src = pg.url; return img.decode().then(() => img); })),
+      scanMsg, e.currentTarget));
+
     document.getElementById('pdf').addEventListener('change', e => {
       pdfFile = e.target.files[0] || null;
       e.target.value = '';
       document.getElementById('pw-row').hidden = true;
+      document.getElementById('ocr-pdf-row').hidden = true;
       if (pdfFile) openPdf();
     });
     document.getElementById('pw-btn').addEventListener('click', () => openPdf(document.getElementById('pw').value));
     document.getElementById('pw').addEventListener('keydown', e => { if (e.key === 'Enter') openPdf(e.target.value); });
+
+    // ── 카메라로 스캔: 찍기 → 네 모서리 맞추기 → 반듯하게 펴기 → 흑백 선명 → 인쇄·PDF ──
+    const JSPDF = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    const MAX_SRC = 2400; // 불러온 사진의 긴 변(픽셀)
+    const MAX_OUT = 2000; // 편 문서의 긴 변(픽셀)
+    let srcCanvas = null; // 불러온 사진
+    let corners = [];     // 사진 위 네 모서리 [왼위, 오위, 오아래, 왼아래]
+    let flatColor = null; // 반듯하게 편 컬러 문서
+    let scanMode = 'bw';
+    const pages = [];     // 담은 문서 { url, w, h }
+    const crop = { scale: 1, drag: -1 };
+
+    function scanMsg(text) { const m = document.getElementById('scan-msg'); m.textContent = text; m.hidden = !text; }
+
+    function resetCorners() {
+      const w = srcCanvas.width, h = srcCanvas.height, mx = w * 0.06, my = h * 0.06;
+      corners = [[mx, my], [w - mx, my], [w - mx, h - my], [mx, h - my]];
+    }
+
+    async function loadPhoto(file) {
+      const url = URL.createObjectURL(file);
+      try {
+        const img = new Image();
+        img.src = url;
+        await img.decode();
+        const s = Math.min(1, MAX_SRC / Math.max(img.naturalWidth, img.naturalHeight));
+        srcCanvas = document.createElement('canvas');
+        srcCanvas.width = Math.round(img.naturalWidth * s);
+        srcCanvas.height = Math.round(img.naturalHeight * s);
+        srcCanvas.getContext('2d').drawImage(img, 0, 0, srcCanvas.width, srcCanvas.height);
+        resetCorners();
+        scanMsg('');
+        document.getElementById('flat').hidden = true;
+        document.getElementById('crop').hidden = false;
+        drawCrop();
+        document.getElementById('crop').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch {
+        scanMsg('사진을 열지 못했어요. 다른 사진으로 다시 해 주세요.');
+      } finally {
+        URL.revokeObjectURL(url);
+      }
+    }
+
+    // 모서리 맞추기 화면: 사진 + 네 모서리를 이은 선 + 끌 수 있는 동그라미
+    function drawCrop() {
+      const cv = document.getElementById('crop-canvas');
+      const boxW = document.getElementById('crop').clientWidth;
+      crop.scale = Math.min(boxW / srcCanvas.width, (window.innerHeight * 0.7) / srcCanvas.height);
+      const w = srcCanvas.width * crop.scale, h = srcCanvas.height * crop.scale, dpr = window.devicePixelRatio || 1;
+      cv.style.width = w + 'px'; cv.style.height = h + 'px';
+      cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+      const g = cv.getContext('2d');
+      g.setTransform(dpr, 0, 0, dpr, 0, 0);
+      g.drawImage(srcCanvas, 0, 0, w, h);
+      const pts = corners.map(([x, y]) => [x * crop.scale, y * crop.scale]);
+      g.beginPath();
+      pts.forEach(([x, y], i) => (i ? g.lineTo(x, y) : g.moveTo(x, y)));
+      g.closePath();
+      g.fillStyle = 'rgba(15,118,110,0.15)'; g.fill();
+      g.lineWidth = 2; g.strokeStyle = '#0f766e'; g.stroke();
+      for (const [x, y] of pts) {
+        g.beginPath(); g.arc(x, y, 13, 0, Math.PI * 2);
+        g.fillStyle = 'rgba(255,255,255,0.85)'; g.fill();
+        g.lineWidth = 3; g.strokeStyle = '#0f766e'; g.stroke();
+      }
+    }
+
+    function cropPoint(e) {
+      const r = document.getElementById('crop-canvas').getBoundingClientRect();
+      return [(e.clientX - r.left) / crop.scale, (e.clientY - r.top) / crop.scale];
+    }
+
+    // 8개 식을 풀어, 펼친 사각형의 점 → 사진 속 점으로 옮기는 변환(호모그래피)을 구합니다.
+    function homography(from, to) {
+      const A = [], b = [];
+      for (let i = 0; i < 4; i++) {
+        const [x, y] = from[i], [u, v] = to[i];
+        A.push([x, y, 1, 0, 0, 0, -u * x, -u * y]); b.push(u);
+        A.push([0, 0, 0, x, y, 1, -v * x, -v * y]); b.push(v);
+      }
+      for (let c = 0; c < 8; c++) {
+        let p = c;
+        for (let r = c + 1; r < 8; r++) if (Math.abs(A[r][c]) > Math.abs(A[p][c])) p = r;
+        [A[c], A[p]] = [A[p], A[c]]; [b[c], b[p]] = [b[p], b[c]];
+        for (let r = 0; r < 8; r++) {
+          if (r === c) continue;
+          const f = A[r][c] / A[c][c];
+          for (let k = c; k < 8; k++) A[r][k] -= f * A[c][k];
+          b[r] -= f * b[c];
+        }
+      }
+      return b.map((v, i) => v / A[i][i]);
+    }
+
+    function flatten() {
+      const q = corners, d = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+      let w = Math.max(d(q[0], q[1]), d(q[3], q[2])), h = Math.max(d(q[0], q[3]), d(q[1], q[2]));
+      const s = MAX_OUT / Math.max(w, h);
+      w = Math.max(1, Math.round(w * s)); h = Math.max(1, Math.round(h * s));
+      const H = homography([[0, 0], [w, 0], [w, h], [0, h]], q);
+      const sw = srcCanvas.width, sh = srcCanvas.height;
+      const src = srcCanvas.getContext('2d').getImageData(0, 0, sw, sh).data;
+      const out = new ImageData(w, h), o = out.data;
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          const z = H[6] * x + H[7] * y + 1;
+          let sx = (H[0] * x + H[1] * y + H[2]) / z, sy = (H[3] * x + H[4] * y + H[5]) / z;
+          sx = Math.min(Math.max(sx, 0), sw - 1.001); sy = Math.min(Math.max(sy, 0), sh - 1.001);
+          const x0 = sx | 0, y0 = sy | 0, fx = sx - x0, fy = sy - y0;
+          const i00 = (y0 * sw + x0) * 4, i10 = i00 + 4, i01 = i00 + sw * 4, i11 = i01 + 4, oi = (y * w + x) * 4;
+          for (let c = 0; c < 3; c++) {
+            const top = src[i00 + c] + (src[i10 + c] - src[i00 + c]) * fx;
+            const bot = src[i01 + c] + (src[i11 + c] - src[i01 + c]) * fx;
+            o[oi + c] = top + (bot - top) * fy;
+          }
+          o[oi + 3] = 255;
+        }
+      }
+      flatColor = document.createElement('canvas');
+      flatColor.width = w; flatColor.height = h;
+      flatColor.getContext('2d').putImageData(out, 0, 0);
+    }
+
+    // 흑백 선명: 주변 밝기 평균과 견주어 종이는 하얗게, 글자는 진하게(그림자·얼룩을 줄입니다).
+    function enhance(canvas) {
+      const w = canvas.width, h = canvas.height;
+      const img = canvas.getContext('2d').getImageData(0, 0, w, h), p = img.data;
+      const gray = new Float32Array(w * h);
+      for (let i = 0; i < w * h; i++) gray[i] = 0.299 * p[i * 4] + 0.587 * p[i * 4 + 1] + 0.114 * p[i * 4 + 2];
+      const W = w + 1, sum = new Float64Array(W * (h + 1));
+      for (let y = 0; y < h; y++) {
+        let row = 0;
+        for (let x = 0; x < w; x++) { row += gray[y * w + x]; sum[(y + 1) * W + x + 1] = sum[y * W + x + 1] + row; }
+      }
+      const r = Math.max(8, Math.round(Math.max(w, h) / 40));
+      for (let y = 0; y < h; y++) {
+        const y0 = Math.max(0, y - r), y1 = Math.min(h, y + r + 1);
+        for (let x = 0; x < w; x++) {
+          const x0 = Math.max(0, x - r), x1 = Math.min(w, x + r + 1);
+          const mean = (sum[y1 * W + x1] - sum[y0 * W + x1] - sum[y1 * W + x0] + sum[y0 * W + x0]) / ((y1 - y0) * (x1 - x0));
+          const t = gray[y * w + x] / (mean + 1);
+          const v = t > 0.9 ? 255 : Math.max(0, Math.min(255, ((t - 0.55) / 0.35) * 255));
+          const i = (y * w + x) * 4;
+          p[i] = p[i + 1] = p[i + 2] = v;
+        }
+      }
+      const outCanvas = document.createElement('canvas');
+      outCanvas.width = w; outCanvas.height = h;
+      outCanvas.getContext('2d').putImageData(img, 0, 0);
+      return outCanvas;
+    }
+
+    function showFlat() {
+      const result = scanMode === 'bw' ? enhance(flatColor) : flatColor;
+      const cv = document.getElementById('flat-canvas');
+      cv.width = result.width; cv.height = result.height;
+      cv.getContext('2d').drawImage(result, 0, 0);
+      document.getElementById('mode-bw').setAttribute('aria-pressed', scanMode === 'bw');
+      document.getElementById('mode-color').setAttribute('aria-pressed', scanMode === 'color');
+    }
+
+    function renderPages() {
+      const box = document.getElementById('pages');
+      box.textContent = '';
+      pages.forEach((pg, i) => {
+        const fig = el('figure');
+        const img = el('img'); img.src = pg.url; img.alt = `${i + 1}쪽`;
+        const del = el('button', '✕'); del.type = 'button'; del.setAttribute('aria-label', `${i + 1}쪽 빼기`);
+        del.addEventListener('click', () => { pages.splice(i, 1); renderPages(); });
+        fig.append(img, del, el('figcaption', `${i + 1}쪽`));
+        box.append(fig);
+      });
+      document.getElementById('page-count').textContent = `(${pages.length}장)`;
+      document.getElementById('pages-box').hidden = !pages.length;
+    }
+
+    async function printPages() {
+      const area = document.getElementById('print-area');
+      area.textContent = '';
+      for (const pg of pages) { const img = el('img'); img.src = pg.url; area.append(img); await img.decode(); }
+      window.print();
+    }
+
+    async function savePdf() {
+      const btn = document.getElementById('save-btn');
+      btn.disabled = true;
+      try {
+        await loadScript(JSPDF);
+        const doc = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4' });
+        const PW = 210, PH = 297, M = 10;
+        pages.forEach((pg, i) => {
+          if (i) doc.addPage();
+          const s = Math.min((PW - 2 * M) / pg.w, (PH - 2 * M) / pg.h);
+          const w = pg.w * s, h = pg.h * s;
+          doc.addImage(pg.url, 'JPEG', (PW - w) / 2, (PH - h) / 2, w, h);
+        });
+        doc.save('보험증권-스캔.pdf');
+      } catch {
+        scanMsg('PDF를 만들지 못했어요. 인터넷 연결을 확인하거나 "인쇄"에서 "PDF로 저장"을 골라 주세요.');
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    for (const id of ['cam', 'pick']) {
+      document.getElementById(id).addEventListener('change', e => {
+        const file = e.target.files[0];
+        e.target.value = '';
+        if (file) loadPhoto(file);
+      });
+    }
+    const cropCanvas = document.getElementById('crop-canvas');
+    cropCanvas.addEventListener('pointerdown', e => {
+      const [x, y] = cropPoint(e);
+      let best = -1, bestD = 40 / crop.scale; // 손가락 근처(40px 안)의 모서리를 잡습니다.
+      corners.forEach(([cx, cy], i) => { const dd = Math.hypot(cx - x, cy - y); if (dd < bestD) { best = i; bestD = dd; } });
+      if (best < 0) return;
+      crop.drag = best;
+      cropCanvas.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    });
+    cropCanvas.addEventListener('pointermove', e => {
+      if (crop.drag < 0) return;
+      const [x, y] = cropPoint(e);
+      corners[crop.drag] = [Math.min(Math.max(x, 0), srcCanvas.width), Math.min(Math.max(y, 0), srcCanvas.height)];
+      drawCrop();
+    });
+    for (const ev of ['pointerup', 'pointercancel']) cropCanvas.addEventListener(ev, () => { crop.drag = -1; });
+    window.addEventListener('resize', () => { if (srcCanvas && !document.getElementById('crop').hidden) drawCrop(); });
+
+    document.getElementById('rotate-btn').addEventListener('click', () => {
+      const c = document.createElement('canvas');
+      c.width = srcCanvas.height; c.height = srcCanvas.width;
+      const g = c.getContext('2d');
+      g.translate(c.width, 0); g.rotate(Math.PI / 2);
+      g.drawImage(srcCanvas, 0, 0);
+      srcCanvas = c;
+      resetCorners();
+      drawCrop();
+    });
+    document.getElementById('corner-btn').addEventListener('click', () => { resetCorners(); drawCrop(); });
+    document.getElementById('flat-btn').addEventListener('click', () => {
+      flatten();
+      document.getElementById('crop').hidden = true;
+      document.getElementById('flat').hidden = false;
+      showFlat();
+      document.getElementById('flat').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    document.getElementById('mode-bw').addEventListener('click', () => { scanMode = 'bw'; showFlat(); });
+    document.getElementById('mode-color').addEventListener('click', () => { scanMode = 'color'; showFlat(); });
+    document.getElementById('recrop-btn').addEventListener('click', () => {
+      document.getElementById('flat').hidden = true;
+      document.getElementById('crop').hidden = false;
+      drawCrop();
+    });
+    document.getElementById('keep-btn').addEventListener('click', () => {
+      const cv = document.getElementById('flat-canvas');
+      pages.push({ url: cv.toDataURL('image/jpeg', 0.85), w: cv.width, h: cv.height });
+      document.getElementById('flat').hidden = true;
+      srcCanvas = null; flatColor = null;
+      renderPages();
+      scanMsg(`${pages.length}쪽을 담았어요. 더 찍거나, 아래에서 인쇄·PDF로 저장하세요.`);
+      document.getElementById('pages-box').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    document.getElementById('print-btn').addEventListener('click', printPages);
+    document.getElementById('save-btn').addEventListener('click', savePdf);
 
     for (const n of NAMES) { const o = el('option'); o.value = n; document.getElementById('cov-names').append(o); }
 
@@ -623,6 +1059,7 @@
       srcText = ''; rows = []; pdfFile = null;
       pdfMsg('');
       document.getElementById('pw-row').hidden = true;
+      document.getElementById('ocr-pdf-row').hidden = true;
       document.getElementById('edit-card').hidden = true;
       document.getElementById('result').hidden = true;
     });
